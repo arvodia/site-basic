@@ -24,6 +24,7 @@ drupal.dev/profiles/arvodia
 #### Téléchargement Gratuit
 
 Des sites web équipés d’un désign responsive à faible contenu de diffusion avec :
+
     Cinque rubrique pour promouvoir les activités.
     Coordonnée de contact avec map géolocalisation.
     Un formulaire de contact.
@@ -37,9 +38,12 @@ Des sites web équipés d’un désign responsive à faible contenu de diffusion
 #### disponible à l’inscription sur https://www.arvodia.com/fr
 
 Des sites web équipés des fonctionnalités d’abonnement basic avec en plus une taille importante de contenu et une nouvelle rubrique Blog qui permet la publication d’article, mais aussi ;
+
     possibilité de l’utilisateur de s’inscrire pour commenter les articles.
     Un nouveau rôle modérateur avec les permissions de gestion de commenter et utilisation.
     Formulaire de contact pour les inscrits et pour tous les utilisateurs.
+
+
 
 ### Pack Pro : 
 #### disponible à la demande sur contact@arvodia.com
