@@ -20,8 +20,8 @@ drupal.dev/profiles/arvodia
 
 ## Types d’installations
 
-## Pack Basic : 
-# Téléchargement Gratuit
+### Pack Basic : 
+#### Téléchargement Gratuit
 
 Des sites web équipés d’un désign responsive à faible contenu de diffusion avec :
     Cinque rubrique pour promouvoir les activités.
@@ -33,16 +33,16 @@ Des sites web équipés d’un désign responsive à faible contenu de diffusion
     Un Back-office pour la modification de contenu publié, accessible par le rôle d’Administrateur de site.
     Multilingue (anglais, arabe, français)
     
-## Pack Blog : 
-# disponible à l’inscription sur https://www.arvodia.com/fr
+### Pack Blog : 
+#### disponible à l’inscription sur https://www.arvodia.com/fr
 
 Des sites web équipés des fonctionnalités d’abonnement basic avec en plus une taille importante de contenu et une nouvelle rubrique Blog qui permet la publication d’article, mais aussi ;
     possibilité de l’utilisateur de s’inscrire pour commenter les articles.
     Un nouveau rôle modérateur avec les permissions de gestion de commenter et utilisation.
     Formulaire de contact pour les inscrits et pour tous les utilisateurs.
 
-## Pack Pro : 
-# disponible à la demande sur contact@arvodia.com
+### Pack Pro : 
+#### disponible à la demande sur contact@arvodia.com
 
 Des sites web équipés des fonctionnalités d’abonnement Blog, avec en plus ;
 
