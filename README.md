@@ -35,7 +35,8 @@ Des sites web équipés d’un désign responsive à faible contenu de diffusion
     Multilingue (anglais, arabe, français)
     
 ### Pack Blog : 
-#### disponible à l’inscription sur https://www.arvodia.com/fr
+#### disponible à l’inscription sur :
+https://www.arvodia.com/fr/user/register#main-content
 
 Des sites web équipés des fonctionnalités d’abonnement basic avec en plus une taille importante de contenu et une nouvelle rubrique Blog qui permet la publication d’article, mais aussi ;
 
@@ -65,4 +66,7 @@ $ git clone https://github.com/arvodia/arvodia.git
 
 [contact@arvodia.com](mailto:contact@arvodia.com) - EURL ARVODIA
 
+## Site Web :
+
+https://www.arvodia.com/fr
 
