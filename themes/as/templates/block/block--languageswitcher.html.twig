@@ -1,0 +1,24 @@
+{#
+#}
+{% if is_accueil is defined %}
+    <div class="btn-group dropleft">
+
+        <li class="dropdown-toggle" data-toggle="dropdown">
+            <a href="/user" title="{{ 'Translate'|t }} " rel="My account" class="glyphicon glyphicon-globe" ></a>
+        </li>
+        <div class="dropdown-menu">
+            {{ content }}
+        </div>
+    </div>
+{% else %}
+    <li class="dropdown">
+        {{ title_prefix }}
+        {% if label %}
+            <a href="#" class="dropdown-toggle glyphicon glyphicon-globe" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="{{ 'Translate'|t }} "><span class="caret"></span></a>
+            {% endif %}
+            {{ title_suffix }}
+            {% block content %}
+                {{ content }}
+            {% endblock %}
+    </li>    
+{% endif %}

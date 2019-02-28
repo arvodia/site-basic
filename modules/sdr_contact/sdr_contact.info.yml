@@ -1,0 +1,17 @@
+name: Basic Contact
+type: module
+description: Un site web de cinque rubique avec un formulaire de contact
+core: 8.x
+package: EURL ARVODIA
+dependencies:
+# EURL ARVODIA PACK
+  #- maps
+  - sdr_carousel
+  - exlink
+  - sdr_msg
+  - sdr_user 
+  - sdr_agenda
+themes:
+  - as
+hidden: true  
+php: 7.0

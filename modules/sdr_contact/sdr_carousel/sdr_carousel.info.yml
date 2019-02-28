@@ -1,0 +1,10 @@
+name: SDR Carousel
+type: module
+description: Animation Bar
+core: 8.x
+package: EURL ARVODIA
+hidden: true
+dependencies:
+  - image
+themes:
+  - as

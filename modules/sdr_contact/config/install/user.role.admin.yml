@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies: {  }
+id: admin
+label: Manager
+weight: 3
+is_admin: null
+permissions:
+  - 'contents'
+  - 'edit own carousel content'
+  - 'edit own contenu_laterale content'
+  - 'edit own external_link content'
+  - 'edit own page content'
+  - 'formulaire de contact'
+  - 'general settings'
+  - 'translate settings'  
+  - 'gestion google map'
+  - 'translate carousel node'
+  - 'translate contenu_laterale node'
+  - 'translate external_link node'
+  - 'translate page node'
+  - 'use text format basic_html'
+  - 'view own unpublished content'
+  - 'status contents'  
+  - 'access site in maintenance mode'
+  - 'skip comment approval'
+  - 'access user contact forms'

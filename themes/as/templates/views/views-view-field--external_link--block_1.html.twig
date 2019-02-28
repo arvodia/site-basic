@@ -1,0 +1,16 @@
+{#
+#}
+{% if exlinks %}
+    {% set i = 0 %}
+    {% for exlink in exlinks %}
+        {% if exlink.url and exlink.title %}
+            {% if i %}
+            </li><li>
+            {% endif %}      
+            <a href='{{ exlink.url }}' ><img height="19" width="19" src="{{ exlink.ico }}" /> {{ exlink.title }}</a>
+                {% set i = 1 %}
+            {% endif %}
+        {% endfor %}
+    {% else %}  
+        {{ output -}}
+    {% endif %}

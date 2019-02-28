@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 9 mars 2018, 08:30:30
+    Author     : developer
+*/
+/*
+---------------------------------------------------------------------------------------
+*/
+.carte-tb {
+    clear:  initial;
+    margin: 0.5cm;
+    height: 6cm;
+    width: 10cm;
+    background-color: #a3bce4;
+}
+.carte-tb td {
+    padding: 0.1cm;
+    vertical-align: top;
+}
+.carte-txt {
+    width: 100%;
+    margin-bottom: 0.1cm;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+.carte-var {
+    padding: 0.1cm;
+    border: solid #000 1px;
+    background-color: #fff;
+    border: none;
+}
+.sdbarr {
+    margin: 0.1cm;
+}

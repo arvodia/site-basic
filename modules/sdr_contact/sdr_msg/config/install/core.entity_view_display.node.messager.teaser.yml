@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.messager.body
+    - field.field.node.messager.field_recipient
+    - node.type.messager
+  module:
+    - text
+    - user
+id: node.messager.teaser
+targetEntityType: node
+bundle: messager
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_recipient: true
+  langcode: true
+  links: true

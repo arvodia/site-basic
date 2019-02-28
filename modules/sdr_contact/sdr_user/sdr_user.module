@@ -1,0 +1,171 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+
+function sdr_user_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.sdr_user':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('Activer all permissions pour le role admin et install toolbar') . '</p>';
+            return $output;
+        default:
+    }
+}
+
+function sdr_user_theme() {
+    return [
+        'user__full' => [
+            'base hook' => 'field',
+        ],
+        'my_awesome_form' => [
+            'render element' => 'form',
+        ],
+    ];
+}
+
+function sdr_user_preprocess_page(array &$variables) {
+    if (\Drupal::routeMatch()->getRouteName() == 'sdr_user.sudo_form')
+        $variables['carousel_off'] = true;
+}
+
+function sdr_user_theme_suggestions_user_alter(array &$suggestions, array $variables) {
+    if ($variables['elements']['#view_mode'] == 'full')
+        $suggestions[] = 'user__full';
+}
+
+function sdr_user_preprocess_user(array &$variables) {
+    if ($variables['elements']['#view_mode'] == 'full') {
+        $variables['sdruser']['sitename'] = \Drupal::config('system.site')->get('name');
+        $variables['sdruser']['siteslogan'] = \Drupal::config('system.site')->get('slogan');
+        $variables['sdruser']['name'] = $variables['user']->name->value;
+        $variables['sdruser']['role'] = '';
+        $variables['webmail'] = false;
+        if (\Drupal::currentUser()->id() == 3) {
+            $variables['webmail'] = 'non';
+        }
+        foreach ($variables['elements']['#user']->getRoles() as $var) {
+            $variables['sdruser']['role'] = $variables['sdruser']['role'] . \Drupal::config('user.role.' . $var)->get('label') . ', ';
+        }
+        $variables['#attached'] = [
+            'library' => [
+                'sdr_user/user.theme'
+            ]
+        ];
+    }
+}
+
+function sdr_user_library_info_alter(&$libraries, $extension) {
+    $libraries['user.theme'] = [
+        'title' => 'Arvodia User styling',
+        'version' => '0.1',
+        'css' => [
+            'component' => [
+                'css/user.theme.css' => [],
+            ],
+        ],
+    ];
+}
+
+function sdr_user_preprocess_menu__tools(array &$variables) {
+    foreach ($variables['items'] as $key => $item)
+        if ($variables['items'][$key]['url']->getRouteName() == 'sdr_user.sudo_form') {
+            $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-globe');
+            break;
+        }
+}
+
+function sdr_user_user_access(EntityInterface $entity, $operation, AccountInterface $account) {
+    if ($entity->id() == 1)
+        return AccessResult::forbidden();
+    return AccessResult::neutral();
+}
+
+function sdr_user_user_insert($entity) {
+    if ((\Drupal::config('sdr_contact.parametre')->get('settings.register_as') == 'contributor')) {
+        $entity->addRole('contrib');
+        $entity->save();
+    }
+}
+
+function sdr_user_form_user_form_alter(&$form, FormStateInterface $form_state) {
+    if (!\Drupal::currentUser()->isAnonymous() && $form_state->getFormObject()->getEntity()->id()) {
+        $account_data = \Drupal::service('user.data')->get('contact', $form_state->getFormObject()->getEntity()->id(), 'enabled');
+        if ($form_state->getFormObject()->getEntity()->id() == 3)
+            $form['account']['status']['#access'] = false;
+    }
+    $form['contact'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Personal contact form'),
+        '#default_value' => isset($account_data) ? $account_data : \Drupal::config('contact.settings')->get('user_default_enabled'),
+        '#description' => t('Allow other users to contact you via a personal contact form which keeps your email address hidden. Note that some privileged users such as site administrators are still able to contact you even if you choose to disable this feature.'),
+    ];
+    $form['#validate'][] = 'sdr_user_form_user_form_validate';
+}
+
+function sdr_user_form_user_form_validate(&$form, FormStateInterface $form_state) {
+    if (strlen($form_state->getValue('name')) < 5)
+        $form_state->setErrorByName('name', t('Login Doit être composé d\'au moins 5 caractères'));
+    if ($form_state->getValue('pass'))
+        if (!preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$#', $form_state->getValue('pass')))
+            $form_state->setErrorByName('pass', t('Password : 8 characters in length, uppercase, lowercase and special characters'));
+}
+
+function sdr_user_user_presave($storage) {
+    if ($storage->get('uid')->value != 1)
+        foreach ($storage->get('roles') as $index => $item)
+            if ($item->target_id == 'administrator')
+                $item->target_id = 'authenticated';
+    if (\Drupal::currentUser()->id() != 1)
+        if ($storage->get('uid')->value == 3)
+            if (!$storage->get('status')->value)
+                $storage->set('status', 1);
+}
+
+function sdr_user_preprocess_html(array &$variables) {
+    if (!\Drupal::config('sudo.conf')->get('recipients'))
+        if (\Drupal::currentUser()->id() == 3) {
+            \Drupal::configFactory()->getEditable('contact.form.gerant')->set('recipients', [\Drupal::currentUser()->getEmail()])->save();
+            \Drupal::configFactory()->getEditable('sudo.conf')->set('recipients', 1)->save();
+            \Drupal::configFactory()->getEditable('sudo.conf')->set('firstmail', \Drupal::currentUser()->getEmail())->save();
+        }
+// decomenter pour activer adminnistrateur
+    \Drupal::configFactory()->getEditable('user.role.administrator')->set('is_admin', true)->save();
+    User::load(1)->activate()->save();
+// commenter pour desable adminnistrateur
+    /* foreach (user_role_names() as $cle => $value) {
+      if (\Drupal::config('user.role.' . $cle)->get('is_admin'))
+      \Drupal::configFactory()->getEditable('user.role.' . $cle)->set('is_admin', false)->save();
+      }
+      if ((\Drupal::currentUser()->id() == 1) || (in_array("administrator", \Drupal::currentUser()->getRoles()))) {
+      Drupal\user\Entity\User::load(1)->block()->save();
+      $response = new RedirectResponse('/user/logout');
+      $response->send();
+      exit;
+      } */
+//END
+}
+
+function sdr_user_cron() {
+    Drupal\user\Entity\User::load(1)->block()->save();
+    foreach (user_role_names() as $cle => $value) {
+        if (\Drupal::config('user.role.' . $cle)->get('is_admin'))
+            \Drupal::configFactory()->getEditable('user.role.' . $cle)->set('is_admin', false)->save();
+    }
+}
+
+function sdr_user_user_login($account) {
+    if (\Drupal::currentUser()->id() == 3 && User::load(3)->get('access')->value == 0) {
+        User::load(3)->set('created', \Drupal::time()->getCurrentTime())->save();
+        drupal_flush_all_caches();
+        \Drupal::service('router.builder')->rebuild();
+    }
+}

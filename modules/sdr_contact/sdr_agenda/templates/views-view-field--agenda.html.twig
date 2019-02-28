@@ -1,0 +1,18 @@
+{#
+#}
+{% if sdrurl %}
+    {% if output is not empty %}
+        <a href="{{ sdrurl.href }}" hreflang="{{ sdrurl.hreflang }}" title="{{ sdrurl.desc }}" 
+           {% if sdrurl.title == "Present"%}
+               style="color:#33a333;"
+           {% elseif sdrurl.title == "Absent" %}        
+               style="color:#A81817;"
+           {% elseif sdrurl.title == "Justifie" %}
+               style="color:#e09600;"
+           {% else %}
+           {% endif %}           
+           >{{ sdrurl.title }}</a>
+    {% endif %}
+{% else %}    
+    {{ output -}}
+{% endif %}

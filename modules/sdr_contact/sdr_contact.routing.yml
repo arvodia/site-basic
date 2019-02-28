@@ -1,0 +1,24 @@
+sdr_contact.contact_form:
+  path: '/form/contact'
+  defaults:
+    _form: '\Drupal\sdr_contact\Form\ContactForm'
+    _title: 'Contact Form'
+  requirements:
+    _permission: 'formulaire de contact'    
+  
+sdr_contact.parametre_form:
+  path: '/form/parametre'
+  defaults:
+    _form: '\Drupal\sdr_contact\Form\ParametreForm'
+    _title: 'General Settings'
+  requirements:
+    _permission: 'general settings'  
+  
+sdr_contact.tanslate_form:
+  path: '/form/translate'
+  defaults:
+    _form: '\Drupal\sdr_contact\Form\TanslateForm'
+    _title: 'Settings Translate'
+  requirements:
+    _permission: 'translate settings' 
+  

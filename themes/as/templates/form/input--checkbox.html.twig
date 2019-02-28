@@ -1,0 +1,19 @@
+{#
+#}
+{% if hidden is defined %} 
+    {%
+  set classes = [
+    '',
+    'inputhidden',
+  ]
+    %}     
+    <input{{ attributes.addClass(classes) }} checked />{{ children }} 
+{% else %} 
+    {%
+  set classes = [
+    '',
+    'checkbox',
+  ]
+    %}    
+    <input{{ attributes.addClass(classes) }} />{{ children }}    
+{% endif %} 

@@ -1,0 +1,21 @@
+{% extends "block.html.twig" %}
+{#
+#}
+{% block content %}
+    {#
+    #}
+    {% if site_name %}
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {#<a class="navbar-brand" href="http://getbootstrap.com/examples/navbar/#">Project name</a>#}
+            <a class="navbar-brand" href="{{ path('<front>') }}" title="{{ site_slogan }}" rel="home">{{ site_name }}</a>
+        </div>      
+        {#<a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>#}
+    {% endif %}
+    {#{{ site_slogan }}#}
+{% endblock %}

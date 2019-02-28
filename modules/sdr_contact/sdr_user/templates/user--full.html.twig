@@ -1,0 +1,89 @@
+{#
+#}
+{% if sdruser.name is not defined %}
+    <article{{ attributes }}>
+        {% if content %}
+            {{- content -}}
+        {% endif %}
+        {% if rolesuser is defined %}
+            <p>{{ rolesuser }}</p>
+        {% endif %}
+        {% if nbownnode is defined %}
+            <p>{{ nbownnode }}</p>
+        {% endif %}  
+    </article>
+{% else %}
+    <!-- Add you custom twig html here -->
+    {% if webmail %}
+        <a class="btn btn-success" href="https://email.arvodia.com">ARVODIA Web Mail : {% if webmail != 'non' %}{{ webmail }}{% endif %}</a><hr>
+    {% endif %}
+    <table  class="carte-tb" style="background-image: url('/profiles/arvodia/modules/sdr_contact/img/bg.png');" >
+        <tr>
+            <td align="center">
+                <h6 align="center">{{ sdruser.siteslogan }}</h6><hr class="sdbarr" >  
+            </td>        
+        </tr>
+        <tr>
+            <td align="center">
+                <h5 align="center">{{ sdruser.sitename }}</h5>
+            </td>        
+        </tr> 
+        <tr>
+            <td  style="border: none; padding-left: 0.5cm; padding-right: 0.5cm; height: 4cm;">
+                <table width="100%"  >
+                    <tr valign="top">
+                        <td rowspan="5" width="34%" align="center">
+                            {{ content.user_picture }}
+                        </td>
+                        <td class="carte-var">
+                            {{ "Name" |trans }} : {{ sdruser.name }}
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td class="carte-var" >
+                            {{ "Rôles" |trans }} : {{ sdruser.role }}
+                        </td>
+                    </tr>
+                    {% if sdruser.article is defined %}
+                        <tr valign="top">
+                            <td class="carte-var">
+                                {{ 'Article' |trans }} : {{ sdruser.article }}
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td class="carte-var">
+                                {{ 'Comments' |trans }} : {{ sdruser.comment }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr valign="top">
+                            <td class="carte-var">
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td class="carte-var">
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if sdruser.website is defined %}
+                        <tr valign="top">
+                            <td class="carte-var">
+                                {{ 'WebSite' |trans }} : {{ sdruser.website }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr valign="top">
+                            <td class="carte-var">
+                            </td>
+                        </tr>
+                    {% endif %}                               
+                    <tr valign="top">
+                        <td colspan="4" align="center">
+                            {{ content.member_for }}
+                        </td>
+                    </tr>
+                </table>
+            </td>        
+        </tr>    
+    </table>
+{% endif %}

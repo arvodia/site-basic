@@ -1,0 +1,30 @@
+{#
+#}
+<article{{ attributes }}>
+    <div class="panel panel-info"> 
+        {% if display_submitted %}
+            <div class="panel-heading panel-cmt">      
+                <footer class="panel-title pull-left">
+                    <div{{ author_attributes }}>
+                        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+                        {{ metadata }}
+                    </div>
+                </footer>
+                <div class="pull-right"> 
+                    <a class="glyphicon glyphicon-remove" href="{{ url }}/delete" ></a>
+                </div> 
+            </div>      
+        {% endif %}    
+        <div class="panel-body"> 
+            <div class="pull-left">    
+                {{ author_picture }}
+            </div>
+            <h3{{ title_attributes }}>
+                {{ label }}
+            </h3>
+            <div{{ content_attributes }}>
+                {{ content }}
+            </div>
+        </div> 
+    </div>   
+</article>

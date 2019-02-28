@@ -1,0 +1,47 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.messager.body
+    - field.field.node.messager.field_email
+    - field.field.node.messager.field_from
+    - field.field.node.messager.field_recipient
+    - node.type.messager
+  module:
+    - text
+    - user
+id: node.messager.default
+targetEntityType: node
+bundle: messager
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_email:
+    weight: 1
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_from:
+    weight: 0
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_recipient: true
+  langcode: true

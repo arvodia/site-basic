@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+id: authenticated
+label: 'Authenticated user'
+weight: 1
+is_admin: false
+permissions:
+  - 'access content'
+  - 'access site-wide contact form'
+  - 'access sitemap'
+  - 'create agenda content'
+  - 'delete own agenda content'
+  - 'edit own agenda content'

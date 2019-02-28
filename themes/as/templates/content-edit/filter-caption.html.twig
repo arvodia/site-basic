@@ -1,0 +1,12 @@
+{#
+#}
+<figure role="group"{%- if classes %} class="{{ classes }}"{%- endif %}>
+    {% if link is defined %}
+        <div with="254px">
+            <a href="{{ link.1 }}">{{ node }}</a>
+        </div>
+    {% else %}     
+        {{ node }}
+    {% endif %} 
+    <figcaption >{{ caption }}</figcaption>
+</figure>

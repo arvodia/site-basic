@@ -1,0 +1,9 @@
+{#
+#}
+{% if url %}
+    {% if output is not empty %}
+        <a class="btn btn-lg btn-success" href="{{ output -}}" type="application/pdf; length=928827">{{ 'Download'|t }}</a>
+    {% endif %}
+{% else %}    
+    {{ output -}}
+{% endif %}

@@ -1,0 +1,14 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+function sdr_basic_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.sdr_basic':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('Un site web de cinque rubique avec un formulaire de contact') . '</p>';
+            return $output;
+        default:
+    }
+}

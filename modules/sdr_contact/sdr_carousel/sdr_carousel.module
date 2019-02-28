@@ -1,0 +1,57 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+function sdr_carousel_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.sdr_carousel':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('Animation Bar') . '</p>';
+            return $output;
+        default:
+    }
+}
+
+function sdr_carousel_form_node_carousel_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['#validate'][] = 'sdr_carousel_form_node_carousel_edit_form_validate';
+}
+
+function sdr_carousel_form_node_carousel_edit_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    if (!empty($form_state->getValue('field_hyperlien')[0]['uri']))
+        if (empty($form_state->getValue('field_hyperlien')[0]['title']))
+            $form_state->setErrorByName('field_hyperlien', t('please add a link title.'));
+}
+
+function sdr_carousel_preprocess_views_view_fields__view_carousel__block_1(array &$var) {
+    if (\Drupal::config('sdr_contact.parametre')->get('settings.activate_avatar'))
+        if (\Drupal\user\Entity\User::load(\Drupal\node\Entity\Node::load($var['row']->nid)->uid->entity->uid->value)->get('user_picture')->entity !== null)
+            $var['avatar'] = (\Drupal\user\Entity\User::load(\Drupal\node\Entity\Node::load($var['row']->nid)->uid->entity->uid->value)->get('user_picture')->entity->url());
+}
+
+function sdr_carousel_preprocess_views_view__view_carousel__block_1(array &$variables) {
+    if ($variables['rows']) {
+        $variables['rows'][0]["#rows"] = array_reverse($variables['rows'][0]["#rows"]);
+        $variables['total'] = count($variables['rows'][0]["#rows"]) - 1;
+    }
+}
+
+function sdr_carousel_preprocess_views_view_field(array &$variables) {
+    if ($variables['field']->field == "field_hyperlien") {
+        if ($variables['field']->original_value) {
+            $xml_link = new SimpleXMLElement($variables['field']->original_value);
+            global $base_url;
+            $url = Drupal\Core\Url::fromUri(parse_url($base_url)['scheme'] . '://' . parse_url($base_url)['host'] . $xml_link['href']);
+            $url->setOptions([
+                'attributes' => [
+                    'class' => [
+                        'btn',
+                        'btn-lg',
+                        'btn-primary',
+                    ],
+                ],
+            ]);
+            $variables['output'] = Drupal\Core\Link::fromTextAndUrl(t((string) $xml_link), $url)->toString();
+        }
+    }
+}

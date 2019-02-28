@@ -1,0 +1,5 @@
+services:
+    sdr_contact.route_subscriber:
+        class: Drupal\sdr_contact\Routing\RouteSubscriber
+        tags:
+            - { name: event_subscriber }

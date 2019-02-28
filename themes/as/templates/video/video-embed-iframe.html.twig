@@ -1,0 +1,16 @@
+{#
+.addClass(classes)
+{%
+  set classes = [
+    'embed-responsive-item',
+  ]
+%}
+#}
+{%
+  set classes = [
+    'video-embed',
+  ]
+%}
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe {{ attributes }}{% if url is not empty %} src="{{ url }}{% if query is not empty %}?{{ query | url_encode }}{% endif %}{% if fragment is not empty %}#{{ fragment }}{% endif %}"{% endif %}></iframe>
+</div>

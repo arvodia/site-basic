@@ -1,0 +1,16 @@
+{#
+#}
+{% if path('<current>') != "/#{language}/user/login" and path('<current>') != "/#{language}/user/password" %}
+    <div{{ attributes }}>
+    {% else %}
+        <div class="form-signin">
+        {% endif %}
+        {{ title_prefix }}
+        {% if label %}
+            <h2{{ title_attributes }}>{{ label }}</h2>
+        {% endif %}
+        {{ title_suffix }}
+        {% block content %}
+            {{ content }}
+        {% endblock %}
+    </div>

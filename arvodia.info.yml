@@ -1,0 +1,88 @@
+name: ARVODIA WEB SITE
+type: profile
+description: "Profile d'installation - Developed By, Communication Agency, EURL ARVODIA."
+core: 8.x
+dependencies:
+  - node
+  - history
+  - block
+  - breakpoint
+  - ckeditor
+  - color
+  - config
+  - contextual
+  - contact
+  - menu_link_content
+  - datetime
+  - block_content
+  - quickedit
+  - editor
+  - help
+  - image
+  - menu_ui
+  - options
+  - path
+  - page_cache
+  - dynamic_page_cache
+  - dblog
+  - search
+  - shortcut
+  - field_ui
+  - file
+  - rdf
+  - views
+  - views_ui
+  - tour
+  - automated_cron
+  - language
+  - locale
+  - content_translation
+  - config_translation 
+  - responsive_image  
+  - syslog
+  - statistics
+  - ctools
+  - token  
+  - pathauto
+  - video_embed_wysiwyg
+  - redirect
+  - redirect_404
+  - search404
+  - hreflang
+  - back_to_top
+  - sitemap
+  - robotstxt
+  - xmlsitemap 
+  - xmlsitemap_custom
+  - xmlsitemap_engines
+  - honeypot  
+  - advagg
+  - advagg_js_minify
+  - advagg_old_ie_compatibility
+  - advagg_css_minify
+  - advagg_cdn 
+  - advagg_bundler
+  - metatag
+  - metatag_app_links
+  - metatag_dc
+  - metatag_dc_advanced
+  - metatag_facebook
+  - metatag_favicons
+  - metatag_google_cse
+  - metatag_google_plus
+  - metatag_hreflang
+  - metatag_mobile
+  - metatag_open_graph
+  - metatag_open_graph_products
+  - metatag_twitter_cards
+  - metatag_verification
+  - metatag_views
+themes:
+  - as
+  - seven
+distribution:
+  name: arvodia
+  langcode: en
+php: 7.0
+'interface translation project': arvodia
+'interface translation server pattern': profiles/arvodia/translations/%language.po

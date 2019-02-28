@@ -1,0 +1,15 @@
+{#
+#}
+{% if is_login is not defined %}
+    {{ title_prefix }}
+    {% if title %}
+        <div class="page-header">
+            {% if is_home is defined %}
+                <h1{{ title_attributes }}>{{ 'Home'|t }}</h1>
+            {% else %}    
+                <h1{{ title_attributes }}>{{ title }}</h1>
+            {% endif %}         
+        </div>
+    {% endif %}
+    {{ title_suffix }}
+{% endif %}    

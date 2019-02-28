@@ -1,0 +1,124 @@
+<?php
+
+use \Drupal\menu_link_content\Entity\MenuLinkContent;
+use \Drupal\file\Entity\File;
+use Drupal\user\RoleInterface;
+
+\Drupal::service('entity.definition_update_manager')->applyUpdates();
+
+function sdr_contact_install() {
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $menu_link = MenuLinkContent::create([
+                'title' => t('Home'),
+                'link' => ['uri' => 'internal:/home'],
+                'menu_name' => 'footer',
+                'expanded' => TRUE,
+                'weight' => -50,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t('Accueil')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t('الرئيسية')]
+    );
+    $menu_link->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t('Contact'),
+                'link' => ['uri' => 'internal:/contact'],
+                'menu_name' => 'main',
+                'expanded' => TRUE,
+                'weight' => +50,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t('Contact')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t('اتصل')]
+    );
+    $menu_link->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t(' Contact Forms'),
+                'description' => t('contact form settings'),
+                'link' => ['uri' => 'internal:/form/contact'],
+                'menu_name' => 'tools',
+                'expanded' => TRUE,
+                'weight' => 4,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t(' Formulaires de contact')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t(' نماذج الاتصال')]
+    );
+    $menu_link->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t(' All Contents'),
+                'description' => t('Show all contents'),
+                'link' => ['uri' => 'internal:/contents'],
+                'menu_name' => 'tools',
+                'expanded' => TRUE,
+                'weight' => 3,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t(' Tous les contenus')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t(' جميع المحتويات')]
+    );
+    $menu_link->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t(' General Settings'),
+                'description' => t('General Settings'),
+                'link' => ['uri' => 'internal:/form/parametre'],
+                'menu_name' => 'tools',
+                'expanded' => TRUE,
+                'weight' => 5,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t(' réglages généraux')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t(' الاعدادات العامة')]
+    );
+    $menu_link->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t(' Translate Settings'),
+                'description' => t('Show Translate Settings'),
+                'link' => ['uri' => 'internal:/form/translate'],
+                'menu_name' => 'tools',
+                'expanded' => TRUE,
+                'weight' => 8,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t(' Traduction option')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t(' إعدادات الترجمة')]
+    );
+    $menu_link->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t('Sitemap'),
+                'link' => ['uri' => 'internal:/sitemap'],
+                'menu_name' => 'footer',
+                'expanded' => TRUE,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t('Sitemap')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t('خريطة الموقع')]
+    );
+    $menu_link->save();
+    $uri = file_unmanaged_copy('profiles/arvodia/modules/sdr_contact/img/user.png', 'public://src/user.png', FILE_EXISTS_REPLACE);
+    $file = File::Create([
+                'uri' => $uri,
+    ]);
+    $file->setPermanent();
+    $file->save();
+    \Drupal::configFactory()->getEditable('field.field.user.user.user_picture')->set('settings.default_image.uuid', $file->uuid())->save();
+    user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access user contact forms']);
+    \Drupal::configFactory()->getEditable('statistics.settings')->set('count_content_views', 1)->save(TRUE);
+    \Drupal::configFactory()->getEditable('views.view.content_recent')->delete();
+    \Drupal::configFactory()->getEditable('sitemap.settings')->delete();
+    \Drupal::configFactory()->getEditable('views.view.frontpage')->delete();
+}

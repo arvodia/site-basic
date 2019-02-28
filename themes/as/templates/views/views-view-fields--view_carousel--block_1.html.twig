@@ -1,0 +1,26 @@
+{#
+#}
+{{ fields.field_img_carousel.content }}
+<div class="container">
+    <div  class="carousel-caption" >
+        <div  align="left" >
+            {% if avatar is defined %} 
+                <img class="img-circle img-car logo box-shad" src="{{ avatar }}" />
+            {% endif %}  
+            <div  class="contcar" ></br>
+                <h3 >
+                    {% if isgerant is defined %}                    
+                        <!-- modif carousel -->
+                        <a type="button" class="btn btn-sm {% if isgerant %}btn-success{% else %}btn-danger{% endif %} glyphicon glyphicon-pencil" href="/node/{{ row.nid }}/edit" ></a>
+                    {% endif %}
+                    {{ fields.title.content }}
+                </h3>
+                {{ fields.body.content }}
+            </div></div>      
+        <div align="right" style="height: 54px;" >
+            {%- if fields.field_hyperlien.content -%}
+                {{ fields.field_hyperlien.content }}
+            {%- endif %} 
+        </div>
+    </div>
+</div>

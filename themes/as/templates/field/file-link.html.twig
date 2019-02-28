@@ -1,0 +1,9 @@
+{#
+#}
+{% if url is defined %}
+    <span{{ attributes }}>
+        <img src="{{ url }}" alt="Favicon" height="42" width="42"> 
+    </span>
+{% else %}
+    <span{{ attributes }}>{{ link }}</span>
+{% endif %}

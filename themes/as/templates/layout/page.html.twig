@@ -1,0 +1,129 @@
+{#
+#}
+<div class="container">{# /.content #} 
+    <div id="map">  
+        <header > 
+            <!-- Static navbar -->
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    {# navbar-header = block--system-brading-blog #}
+                    {{ page.header }}
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            {# li = block--system-menu-block.html #}              
+                            {{ page.primary_menu }}
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <!--/ menu--account.html.twig -->              
+                            {{ page.secondary_menu }}             
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div><!--/.container-fluid -->
+            </nav>        
+        </header> 
+        {# /.AND header #}  
+        {# /.Carousel #}  
+        {% if page.carousel %}
+            {{ page.carousel }}
+        {% elseif user_name is defined %}
+            <div class="jumbotron">
+                {% if user_img is defined %}<img class="img-thumbnail" src="{{ user_img }}" style=" width: 100px; height: 100px; float: left; margin-right: 10px;"/>
+                    <br/><br/>
+                {% endif %}
+                <h2> {{ user_name }}</h2>
+            </div> 
+        {% endif %}
+        {# /.AND Carousel #}
+        <main >    
+            {% if language == 'ar' %} 
+                <div class="row">
+                    {# /.layout-content         
+                    {% if large is defined %}<div class="col-md-9">{% else %}<div class="col-md-8">{% endif %}#}
+                    <div class="col-md-9">
+                        <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}      
+                        <div class="layout-content">
+                            {# /.notification #}
+                            {% if page.help %}
+                                {{ page.help }}
+                            {% endif %}  
+                            {{ page.highlighted }}  
+                            {{ page.breadcrumb }}   
+                            {# /.AND notification #} 
+                            {# /.Content #}              
+                            {{ page.content }}
+                            {# /.AND Content #}      
+                        </div> 
+                    </div>        
+                    {# /.layout-content 
+                    {% if large is defined %}<div class="col-md-3">{% else %}<div class="col-md-4">{% endif %}#}
+                    <div class="col-md-3">
+                        {% if page.sidebar_second %}
+                            <aside class="layout-sidebar-second" role="complementary">
+                                {{ page.sidebar_second }}
+                            </aside>
+                        {% endif %}           
+                        {% if page.sidebar_first %}
+                            <aside class="layout-sidebar-first" role="complementary">
+                                {{ page.sidebar_first }}
+                            </aside>
+                        {% endif %}
+                    </div>        
+                </div>         
+            {% else %}
+                <div class="row">
+                    {# /.layout-content 
+                    {% if large is defined %}<div class="col-md-3">{% else %}<div class="col-md-4">{% endif %}#}
+                    <div class="col-md-3">    
+                        {% if page.sidebar_second %}
+                            <aside class="layout-sidebar-second" role="complementary">
+                                {{ page.sidebar_second }}
+                            </aside>
+                        {% endif %}           
+                        {% if page.sidebar_first %}
+                            <aside class="layout-sidebar-first" role="complementary">
+                                {{ page.sidebar_first }}
+                            </aside>
+                        {% endif %}
+                    </div>        
+                    {# /.layout-content         
+                    {% if large is defined %}<div class="col-md-9">{% else %}<div class="col-md-8">{% endif %}#}
+                    <div class="col-md-9">
+                        <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}      
+                        <div class="layout-content">
+                            {# /.notification #}
+                            {% if page.help %}
+                                {{ page.help }}
+                            {% endif %}  
+                            {{ page.highlighted }}  
+                            {{ page.breadcrumb }}   
+                            {# /.AND notification #} 
+                            {# /.Content #}              
+                            {{ page.content }}
+                            {# /.AND Content #}      
+                        </div> 
+                    </div>
+                </div>         
+            {% endif %}
+        </main> 
+    </div>
+</div>
+{# /.fin-content #} 
+{# footer #}
+{% if page.footer %}
+    <footer role="contentinfo">
+        {{ page.footer }}
+    </footer>
+{% endif %}
+<footer class="panel-footer" role="contentinfo">
+    {% if page.footer_second  %}        
+        <div class="container-fluid">{# /.content #} 
+            <div class="row">
+                {{ page.footer_second }} 
+            </div>
+            <HR>
+        </div>
+    {% endif %}     
+    {% if page.footer_fifth %}
+        {{ page.footer_fifth }}     
+    {% endif %}   
+</footer>      

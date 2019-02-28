@@ -1,0 +1,10 @@
+/**
+ * @file
+ * The visual styles for sdr_btstrap search form(s).
+ */
+img {
+    width: 254px;
+}
+figure {
+    background-color: #e3e3e3;
+}

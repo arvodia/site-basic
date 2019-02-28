@@ -1,0 +1,20 @@
+global-css:
+    css:
+        theme:
+            #css/bootstrap.min.css: {}
+            css/dropbutton.component.css: {} 
+#            css/sdr_btstrap.css: {} 
+            #css/sdr_bar.css: {} 
+            #css/normalize.css: {} 
+#global-js:
+#    js:
+#        js/bootstrap.min.js: {}
+        #js/jquery.min.js: {}
+        #js/sdr.bar.js: {}
+    #dependencies:
+      #- core/jquery
+      #- core/drupal
+      #- core/drupalSettings
+      #- core/jquery.once
+      #- core/jquery.ui.core
+      #- core/jquery.ui.effects.core

@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.contenu_laterale.body
+    - field.field.node.contenu_laterale.field_document
+    - node.type.contenu_laterale
+  module:
+    - file
+    - text
+    - user
+id: node.contenu_laterale.teaser
+targetEntityType: node
+bundle: contenu_laterale
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 1
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  field_document:
+    type: file_default
+    weight: 2
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

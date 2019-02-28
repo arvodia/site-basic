@@ -1,0 +1,463 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\sdr_contact\SdrNotification;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use \Drupal\Core\Entity\EntityInterface;
+use \Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\Core\Access\AccessResult;
+
+function sdr_contact_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.sdr_contact':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('Un site web de cinque rubique avec un formulaire de contact') . '</p>';
+            return $output;
+        default:
+    }
+}
+
+function sdr_contact_entity_insert(EntityInterface $entity) {
+    if ($entity->getEntityType()->id() == 'node') {
+        if ($entity->bundle() == 'page') {
+            $rub = MenuLinkContent::create([
+                        'title' => $entity->getTitle(),
+                        'link' => ['uri' => 'internal:/node/' . $entity->id()],
+                        'menu_name' => 'main',
+                        'expanded' => TRUE,
+            ]);
+            if ($entity->hasTranslation('fr')) {
+                $entity_fr = $entity->getTranslation('fr');
+                $rub->addTranslation('fr', [
+                    'title' => $entity_fr->getTitle()]
+                );
+            } else
+                $rub->addTranslation('fr', [
+                    'title' => $entity->getTitle()]
+                );
+            if ($entity->hasTranslation('ar')) {
+                $entity_fr = $entity->getTranslation('ar');
+                $rub->addTranslation('ar', [
+                    'title' => $entity_fr->getTitle()]
+                );
+            } else
+                $rub->addTranslation('ar', [
+                    'title' => $entity->getTitle()]
+                );
+            $rub->save();
+            $rub = MenuLinkContent::create([
+                        'title' => $entity->getTitle(),
+                        'link' => ['uri' => 'internal:/node/' . $entity->id()],
+                        'menu_name' => 'footer',
+                        'expanded' => TRUE,
+            ]);
+            if ($entity->hasTranslation('fr')) {
+                $entity_fr = $entity->getTranslation('fr');
+                $rub->addTranslation('fr', [
+                    'title' => $entity_fr->getTitle()]
+                );
+            } else
+                $rub->addTranslation('fr', [
+                    'title' => $entity->getTitle()]
+                );
+            if ($entity->hasTranslation('ar')) {
+                $entity_fr = $entity->getTranslation('ar');
+                $rub->addTranslation('ar', [
+                    'title' => $entity_fr->getTitle()]
+                );
+            } else
+                $rub->addTranslation('ar', [
+                    'title' => $entity->getTitle()]
+                );
+            $rub->save();
+        }
+        if ($entity->bundle() == 'external_link') {
+            foreach ($entity->field_external_link as $key => $value) {
+                if (@file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri) === false)
+                    $data = file_get_contents("profiles/arvodia/modules/sdr_contact/exlink/img/default.png");
+                else
+                    $data = file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri);
+                $file_src = file_save_data($data, 'public://src/' . parse_url($value->uri)['host'] . '.png', FILE_EXISTS_REPLACE);
+            }
+        }
+    }
+}
+
+function sdr_contact_node_update($entity) {
+    if ($entity->getEntityType()->id() == 'node') {
+        if ($entity->bundle() == 'page') {
+            if (sizeof(\Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', ['node' => $entity->id()]))) {
+                foreach (\Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', ['node' => $entity->id()]) as $menu_link) {
+                    $definition = $menu_link->getPluginDefinition();
+                    $definition['title'] = $entity->getTitle();
+                    \Drupal::service('plugin.manager.menu.link')->updateDefinition($menu_link->getPluginId(), $definition);
+                }
+            }
+        }
+    }
+}
+
+function sdr_contact_node_presave(EntityInterface $node) {
+    if ($node->bundle() == 'page' || $node->bundle() == 'article') {
+        if ($node->body->value) {
+            $node->body->value = str_replace(['<table', '<table class="table table-bordered table-responsive"'], ['<table class="table table-bordered table-responsive"', '<table class="table table-bordered table-responsive"'], $node->body->get(0)->getValue()['value']);
+            preg_match_all('|<img (.+) />|U', $node->body->get(0)->getValue()['value'], $imgtmp);
+            for ($i = 0; $i < count($imgtmp[0]); $i++)
+                if (strpos($imgtmp[0][$i], 'data-caption') === false)
+                    $node->body->value = str_replace($imgtmp[1][$i], '<img data-caption="photo" ' . $imgtmp[1][$i], $node->body->get(0)->getValue()['value']);
+        }
+    }
+    if ($node->bundle() == 'external_link') {
+        foreach ($node->field_external_link as $key => $value) {
+            if (@file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri) === false)
+                $data = file_get_contents("profiles/arvodia/modules/sdr_contact/exlink/img/default.png");
+            else
+                $data = file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri);
+            $file_src = file_save_data($data, 'public://src/' . parse_url($value->uri)['host'] . '.png', FILE_EXISTS_REPLACE);
+            \Drupal::service('router.builder')->rebuild();
+        }
+    }
+}
+
+function sdr_contact_preprocess_filter_caption(array &$var) {
+    if ($var['tag'] == 'img' && $var['theme_hook_original'] == 'filter_caption') {
+        if (empty($var['classes']))
+            $var['classes'] = 'align-center';
+        if ($var['classes'] == 'align-center')
+            $var['node'] = \Drupal\filter\Render\FilteredMarkup::create(str_replace('<img', '<img class="align-center img-thumbnail img-responsive"', $var['node']));
+        if ($var['classes'] == 'align-right')
+            $var['node'] = \Drupal\filter\Render\FilteredMarkup::create(str_replace('<img', '<img class="align-right img-thumbnail img-responsive"', $var['node']));
+        if ($var['classes'] == 'align-left')
+            $var['node'] = \Drupal\filter\Render\FilteredMarkup::create(str_replace('<img', '<img class="align-left img-thumbnail img-responsive"', $var['node']));
+        $var['classes'] .= ' sdr-img';
+        preg_match('/src="(.+)"/', $var['node'], $var['link']);
+    }
+}
+
+function sdr_contact_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
+    if ($node->bundle() == 'carousel' || $node->bundle() == 'contenu_laterale' || $node->bundle() == 'external_link'
+    ) {
+        if ($op == 'view') {
+            if (in_array("admin", \Drupal::currentUser()->getRoles()) || in_array("editeur", \Drupal::currentUser()->getRoles()))
+                return AccessResult::allowed()->cachePerPermissions();
+            return AccessResult::forbidden();
+        }
+        return AccessResult::neutral();
+    }
+}
+
+function sdr_contact_form_user_login_form_alter(array &$form, $form_state, $form_id) {
+    honeypot_add_form_protection($form, $form_state, ['honeypot', 'time_restriction']);
+}
+
+function sdr_contact_form_node_form_alter(&$form, &$form_state, $form_id) {
+    $form['body']['widget']['#after_build'][] = 'formats_article_option';
+}
+
+function formats_article_option($form_element) {
+    if (isset($form_element[0]['format'])) {
+        unset($form_element[0]['format']['help']);
+    }
+    return $form_element;
+}
+
+function sdr_contact_preprocess_file_link(array &$var) {
+    if (\Drupal::routeMatch()->getRouteName() == "sdr_contact.parametre_form") {
+        $var['url'] = $var['file']->url();
+    }
+}
+
+function sdr_contact_preprocess_page(array &$variables) {
+    $variables['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if (\Drupal::currentUser()->id()) {
+        $variables['user_name'] = (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->getAccountName());
+        if (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->get('user_picture')->entity !== null)
+            $variables['user_img'] = (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->get('user_picture')->entity->url());
+    }
+}
+
+function sdr_contact_preprocess_page_title(array &$variables) {
+    if (\Drupal::routeMatch()->getRouteName() == 'view.home.page_1')
+        $variables['is_home'] = true;
+    if (\Drupal::routeMatch()->getRouteName() == 'view.frontpage.page_1')
+        $variables['is_home'] = true;
+    if (\Drupal::routeMatch()->getRouteName() == 'user.login')
+        $variables['is_login'] = true;
+    if (\Drupal::routeMatch()->getRouteName() == 'user.pass')
+        $variables['is_login'] = true;
+}
+
+function sdr_contact_preprocess_block(array &$variables) {
+    if ($variables['base_plugin_id'] == 'system_main_block')
+        if (\Drupal::routeMatch()->getRouteName() == 'view.home.page_1')
+            $variables['is_home'] = true;
+    if (\Drupal::routeMatch()->getRouteName() == 'view.frontpage.page_1')
+        $variables['is_home'] = true;
+    if (\Drupal::routeMatch()->getRouteName() == 'view.blog.page_1')
+        $variables['is_home'] = true;
+    $variables['public'] = file_create_url("public://");
+    $variables['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if ($variables['base_plugin_id'] == 'page_title_block' ||
+            $variables['base_plugin_id'] == 'local_tasks_block'
+    ) {
+        $variables['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+    if ($variables['base_plugin_id'] == 'local_tasks_block') {
+        if (isset($variables['content']['#primary']['user.login'])) {
+            $variables['content']['#primary']['<front>'] = $variables['content']['#primary']['user.login'];
+            $variables['content']['#primary']['<front>']["#link"]['title'] = t('Home');
+            $variables['content']['#primary']['<front>']["#link"]['url'] = Drupal\Core\Url::fromRoute('<front>');
+            $variables['content']['#primary']['<front>']["#active"] = false;
+            $variables['content']['#primary']['<front>']["#weight"] = -19;
+        }
+    }
+}
+
+function sdr_contact_preprocess_node(array &$variables) {
+    if (isset($variables['elements']['body']['#bundle']))
+        if ($variables['elements']['body']['#bundle'] == 'article')
+            if (!\Drupal::config('sdr_contact.parametre')->get('settings.avatar_blog'))
+                unset($variables['author_picture']);
+    if ($variables['elements']['#view_mode'] == "teaser") {
+        
+    }
+}
+
+function sdr_contact_preprocess_details(array &$variables) {
+    if (isset($variables['element']['#id']))
+        if ($variables['element']['#id'] == 'edit-relations' || $variables['element']['#id'] == 'edit-comment-0' || $variables['element']['#id'] == 'edit-options')
+            $variables['visible'] = true;
+}
+
+function sdr_contact_preprocess_views_view_field(array &$variables) {
+    $variables['url'] = false;
+    if ($variables['field']->field == "field_document") {
+        $variables['url'] = true;
+    }
+}
+
+function sdr_contact_preprocess_menu__tools(array &$variables) {
+    $variables['#cache']['max-age'] = 0;
+    foreach ($variables['items'] as $key => $item) {
+        if ($item['in_active_trail'])
+            $variables['items'][$key]['attributes']->addClass('list-group-item active');
+        else
+            $variables['items'][$key]['attributes']->addClass('list-group-item');
+        switch ($variables['items'][$key]['url']->getRouteName()) {
+            case "view.all_contents.page_1":
+                $variables['items'][$key]['title'] = SdrNotification::allcontent(($variables['items'][$key]['title']));
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-folder-open');
+                break;
+            case "sdr_contact.contact_form":
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-envelope');
+                break;
+            case "sdr_contact.parametre_form":
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-wrench');
+                break;
+            case "node.add_page":
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-edit');
+                $variables['items'][$key]['title'] = ' ' . $variables['items'][$key]['title'];
+                if (\Drupal::routeMatch()->getRouteName() == 'node.add')
+                    $variables['items'][$key]['attributes']->addClass('list-group-item active');
+                break;
+            case "node.add":
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-edit');
+                $variables['items'][$key]['title'] = ' ' . $variables['items'][$key]['title'];
+                if (\Drupal::routeMatch()->getRouteName() == 'node.add')
+                    $variables['items'][$key]['attributes']->addClass('list-group-item active');
+                break;
+            case "sdr_contact.tanslate_form":
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-globe');
+                break;
+            case "view.utilisateur.page_1":
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-user');
+                break;
+            case "view.own_contents.page_1":
+                $variables['items'][$key]['title'] = SdrNotification::owncontent(($variables['items'][$key]['title']));
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-folder-open');
+                break;
+            case "view.messaging.page_1":
+                $variables['items'][$key]['title'] = SdrNotification::messager((' ' . $variables['items'][$key]['title']));
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-envelope');
+                break;
+            case "view.messager.page_1"://off
+                $variables['items'][$key]['title'] = SdrNotification::messager(($variables['items'][$key]['title']));
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-envelope');
+                break;
+            case "sitemap.page":
+                $variables['items'][$key]['title'] = ' ' . $variables['items'][$key]['title'];
+                $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-list-alt');
+                break;
+        }
+    }
+}
+
+function sdr_contact_preprocess_menu__main(array &$variables) {
+    foreach ($variables['items'] as $key => $item) {
+        if ($item['url']->getRouteName() == "<front>") {
+            $variables['items'][$key]['is_home'] = false;
+            $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-home');
+            $variables['items'][$key]['title'] = ' ' . $variables['items'][$key]['title'];
+            if (\Drupal::service('current_route_match')->getRouteName() == 'view.home.page_1' || \Drupal::service('current_route_match')->getRouteName() == 'view.frontpage.page_1'
+            ) {
+                $variables['items'][$key]['is_home'] = true;
+            }
+        }
+        if (isset($item['url']->getRouteParameters()['node']) && !empty($item['url']->getRouteParameters()['node']))
+            if (!\Drupal\node\Entity\Node::load($item['url']->getRouteParameters()['node'])->status[0]->value)
+                $variables['items'][$key]['attributes']->addClass('unpublish');
+    }
+}
+
+function sdr_contact_preprocess_menu__account(array &$variables) {
+    foreach ($variables['items'] as $key => $item) {
+        $variables['items'][$key]['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+}
+
+function sdr_contact_preprocess_image(&$variables) {
+    if ($variables['style_name'] == 'medium') {
+        $variables['attributes']['class'][] = 'img-circle';
+        $variables['attributes']['width'] = '150px';
+        $variables['attributes']['height'] = '150px';
+    }
+    if ($variables['style_name'] == 'rubrique_logo_style') {
+        $variables['attributes']['class'][] = 'img-thumbnail align-left';
+    } elseif ($variables['style_name'] == 'image_carousel') {
+        if (isset($variables['attributes']['width']) && isset($variables['attributes']['height'])) {
+            unset($variables['attributes']['width']);
+            unset($variables['attributes']['height']);
+            $variables['attributes']['width'] = '100%';
+        }
+    } else
+        $variables['attributes']['class'][] = 'img-thumbnail';
+}
+
+function sdr_contact_form_alter(array &$form, $form_state, $form_id) {//dump($form);
+    if ($form['#id'] == 'node-page-edit-form' ||
+            $form['#id'] == 'node-carousel-edit-form' ||
+            $form['#id'] == 'node-contenu-laterale-edit-form' ||
+            $form['#id'] == 'node-external-link-edit-form') {
+        $form['actions']['preview']['#access'] = false;
+        if (!in_array("administrator", \Drupal::currentUser()->getRoles()))
+            $form['revision_information']['#access'] = false;
+        if (\Drupal::currentUser()->hasPermission('status contents'))
+            $form['status']['#access'] = true;
+    }
+    if ($form['#form_id'] == 'user_login_form') {
+        $form['actions']['submit']['#attributes']['class'][] = 'btn btn-lg btn-primary btn-block';
+        $form['#attributes']['class'] = 'form-signin';
+        $form['keys']['#attributes']['placeholder']['name'] = t('User Name');
+        $form['name']['#description'] = '<br/>';
+        $form['keys']['#attributes']['placeholder']['password'] = t('Password');
+        $form['pass']['#description'] = '<br/>';
+    }
+    if ($form['#form_id'] == 'user_pass') {
+        $form['actions']['submit']['#attributes']['class'][] = 'btn btn-lg btn-primary btn-block';
+        $form['#attributes']['class'] = 'form-signin';
+    }
+    if ($form['#id'] == 'node-contenu-laterale-edit-form') {
+        $form['body']['widget'][0]['#format'] = 'plain_text';
+    }
+    if ($form['#id'] == 'node-carousel-edit-form') {
+        $form['body']['widget'][0]['#format'] = 'plain_text';
+    }
+}
+
+function sdr_contact_preprocess_container(array &$var) {
+    $var['active'] = true;
+    if (isset($var['element']['#id']) && $var['element']['#id'] == 'edit-body-0-format') {
+        if ($var['element']['format']['#default_value'] == 'plain_text') {
+            $var['active'] = false;
+        }
+    }
+}
+
+function sdr_contact_preprocess_views_view_fields(array &$var) {
+    if ($var['theme_hook_original'] == 'views_view_fields__view_carousel__block_1' || $var['theme_hook_original'] == 'views_view_fields__side_view__block_1' || $var['theme_hook_original'] == 'views_view_fields__external_link__block_1'
+    )
+        if (\Drupal::currentUser()->hasPermission('status contents'))
+            $var['isgerant'] = \Drupal\node\Entity\Node::load($var['row']->nid)->status[0]->value;
+}
+
+function sdr_contact_preprocess_fieldset(array &$var) {
+    if (isset($var['element']['#id']))
+        if (strpos($var['element']['#id'], 'edit-settings') === 0 || strpos($var['element']['#id'], 'edit-attributes-data-align') === 0)
+            $var['hidden'] = true;
+}
+
+function sdr_contact_preprocess_input__checkbox(array &$var) {
+    if (isset($var['element']['#id']))
+        if (strpos($var['element']['#id'], 'edit-attributes-hascaption') === 0)
+            $var['hidden'] = true;
+}
+
+function sdr_contact_preprocess_form_element_label(array &$var) {
+    if (isset($var['element']['#id']))
+        if (strpos($var['element']['#id'], 'edit-attributes-hascaption') === 0)
+            $var['hidden'] = true;
+}
+
+function sdr_contact_preprocess_input__radio(array &$var) {
+    if ($var['element']['#id'] = 'edit-status-0')
+        $var['attributes']['class'][] = 'pull-left';
+}
+
+function sdr_contact_preprocess_vertical_tabs(array &$var) {
+    if ($var['element']['#id'] == 'edit-advanced')
+        if (isset($var['element']['group']['#groups']['advanced'][0]['status']['#id']))
+            if ($var['element']['group']['#groups']['advanced'][0]['status']['#id'] == 'edit-comment-0-status')
+                $var['children'] = \Drupal\filter\Render\FilteredMarkup::create(str_replace('&lt;span class=&quot;translation-entity-all-languages&quot;&gt;(all languages)&lt;/span&gt;', '(all languages)', $var['children']));
+}
+
+function sdr_contact_preprocess_menu_local_action(array &$var) {
+    $var['attributes']['class'][] = 'btn btn-lg ';
+}
+
+function sdr_contact_preprocess_search_result(array &$var) {
+    $var['langcode'] = $var['result']['langcode'];
+}
+
+function sdr_contact_preprocess_feed_icon(array &$var) {
+    $var['attributes']['class'] = ('btn btn-default btfeed glyphicon glyphicon-link');
+}
+
+function sdr_contact_preprocess_maintenance_page(array &$var) {
+    global $base_url;
+    if (Drupal\user\Entity\User::load(3)->get('user_picture')->entity !== null)
+        $var['logo'] = Drupal\user\Entity\User::load(3)->get('user_picture')->entity->url();
+    else
+        $var['logo'] = '/sites/' . str_replace('http://', '', $base_url) . '/files/src/user.png';
+    if (\Drupal::service('module_handler')->moduleExists('sdr_basic') || \Drupal::service('module_handler')->moduleExists('sdr_mblog'))
+        $var['user_name'] = Drupal\user\Entity\User::load(3)->getAccountName();
+}
+
+function sdr_contact_preprocess_html(array &$variables) {
+    $lg = explode('/', \Drupal::request()->getRequestUri())[1];
+    if (\Drupal::config('translate.select')->get('lang'))
+        if (($lg == 'fr' || $lg == 'en' || $lg == 'ar') && count(explode('/', \Drupal::request()->getRequestUri())) > 1)
+            if (!\Drupal::config('translate.select')->get('lang')[$lg]) {
+                $response = new RedirectResponse('/' . \Drupal::config('system.site')->get('default_langcode') . \Drupal::service('path.current')->getPath());
+                $response->send();
+                exit;
+            }
+}
+
+function sdr_contact_preprocess_links__language_block(array &$variables) {
+    if (\Drupal::config('translate.select')->get('lang')) {
+        if (isset($variables['links'])) {
+            if (isset($variables['links']['ar']))
+                if (!\Drupal::config('translate.select')->get('lang')['ar'])
+                    unset($variables['links']['ar']);
+            if (isset($variables['links']['fr']))
+                if (!\Drupal::config('translate.select')->get('lang')['fr'])
+                    unset($variables['links']['fr']);
+            if (isset($variables['links']['en']))
+                if (!\Drupal::config('translate.select')->get('lang')['en'])
+                    unset($variables['links']['en']);
+        }
+    }
+}

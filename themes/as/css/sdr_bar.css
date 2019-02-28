@@ -1,0 +1,44 @@
+/**
+ * @file
+ * https://bootsnipp.com/snippets/featured/navbar-fixed-on-scrolling-with-transition
+ */
+/*
+* Style tweaks
+* --------------------------------------------------
+*/
+
+/*
+ * Custom styles
+ */
+.navbar-brand {
+    font-size: 24px;
+}
+
+.navbar-container {
+    padding: 0px 23px 0px 5px;
+}
+
+.navbar.navbar-fixed-top.navbar-inverse {
+    background-color: #222;
+    border-color: #080808;
+    box-shadow: 0 0 5px rgba(0,0,0,.8);
+    padding-bottom: 5px;
+}
+
+.navbar-brand.navbar-inverse {
+    font-size: 18px;
+}
+
+.navbar-container.navbar-inverse {
+    padding: 0; 
+}
+
+.navbar-brand.navbar-inverse,
+.navbar-container.navbar-inverse,
+.navbar.navbar-fixed-top.navbar-inverse,
+.navbar-brand,
+.navbar-container{
+    transition: 0.8s;
+    -webkit-transition:  0.8s;
+}
+/*---------------------------end------------------*/

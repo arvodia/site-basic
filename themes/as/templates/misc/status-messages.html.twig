@@ -1,0 +1,31 @@
+{#
+#}
+{% for type, messages in message_list %}
+    <div role="contentinfo" aria-label="{{ status_headings[type] }}"{{ attributes|without('role', 'aria-label') }}>
+        <br/>
+        {% if type == 'status' %}
+            <div class="alert alert-success" role="alert">    
+            {% elseif type == 'error' %}
+                <div class="alert alert-danger" role="alert">  
+                {% elseif type == 'warning' %}
+                    <div class="alert alert-warning" role="alert">    
+                    {% elseif type == 'status' %}
+                        <div class="alert alert-success" role="alert">
+                        {% else %}
+                            <div class="alert alert-info" role="alert">
+                            {% endif %}
+                            {% if status_headings[type] %}
+                                <h2 class="visually-hidden">{{ status_headings[type] }}</h2>
+                            {% endif %}
+                            {% if messages|length > 1 %}
+                                <ul>
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                        {% endfor %}
+                                </ul>
+                            {% else %}
+                                {{ messages|first }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}

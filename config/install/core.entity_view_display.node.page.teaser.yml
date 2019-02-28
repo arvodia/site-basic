@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.page.body
+    - field.field.node.page.field_rubrique_logo
+    - image.style.rubrique_logo_style
+    - node.type.page
+  module:
+    - image
+    - text
+    - user
+id: node.page.teaser
+targetEntityType: node
+bundle: page
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 1
+    region: content
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+  field_rubrique_logo:
+    type: image
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      image_style: rubrique_logo_style
+      image_link: content
+    third_party_settings: {  }
+  links:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

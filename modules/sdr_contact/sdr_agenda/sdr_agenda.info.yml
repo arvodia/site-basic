@@ -1,0 +1,10 @@
+name: 'Agenda'
+type: module
+description: 'SDR Agenda est un calendar electronic developed by eurl arvodia'
+core: 8.x
+package: 'EURL ARVODIA'
+dependencies:
+  - calendar
+  - calendar_datetime
+  - views_templates
+hidden: true 

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: image_carousel
+label: 'image carousel'
+effects:
+  47599ae1-844a-4485-bc1d-ab7e387786a4:
+    uuid: 47599ae1-844a-4485-bc1d-ab7e387786a4
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1140
+      height: 456

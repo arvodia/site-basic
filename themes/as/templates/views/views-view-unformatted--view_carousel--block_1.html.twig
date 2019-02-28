@@ -1,0 +1,22 @@
+{#
+#}
+{% if title %}
+    <h3>{{ title }}</h3>
+{% endif %}
+{%
+    set row_classes = [
+      'item',
+      'active',
+    ]
+%}
+{% for row in rows %}
+    <div{{ row.attributes.addClass(row_classes) }}>
+        {{ row.content }}
+    </div>
+    {%
+    set row_classes = [
+      'item',
+      '',
+    ]
+    %}    
+{% endfor %}

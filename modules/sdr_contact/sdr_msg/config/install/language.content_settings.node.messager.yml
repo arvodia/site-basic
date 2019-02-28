@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.messager
+id: node.messager
+target_entity_type_id: node
+target_bundle: messager
+default_langcode: zxx
+language_alterable: false

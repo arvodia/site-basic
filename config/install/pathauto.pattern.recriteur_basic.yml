@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+    - node
+id: recriteur_basic
+label: recriteur-basic
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  1c96b0e5-f510-4896-9d9c-6bc0c6970cdd:
+    id: node_type
+    bundles:
+      page: page
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 1c96b0e5-f510-4896-9d9c-6bc0c6970cdd
+  9d478114-e160-4554-9d5f-e9b4f3eb9b95:
+    id: language
+    langcodes:
+      en: en
+      ar: ar
+      fr: fr
+    negate: false
+    context_mapping:
+      language: 'node:langcode:language'
+    uuid: 9d478114-e160-4554-9d5f-e9b4f3eb9b95
+selection_logic: and
+weight: -5
+relationships:
+  'node:langcode:language':
+    label: Language

@@ -1,0 +1,6 @@
+name: Messager
+type: module
+description: auto save message contact forms
+core: 8.x
+package: EURL ARVODIA
+hidden: true

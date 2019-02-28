@@ -1,0 +1,147 @@
+<?php
+
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\views\Views;
+use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_library_info().
+ */
+function as_library_info_alter(&$libraries, $extension) {
+    $libraries['arvodia.maintenance'] = [
+        'title' => 'Arvodia Styling',
+        'version' => '1.0',
+        'css' => [
+            'component' => [
+                'agency/vendor/bootstrap/css/bootstrap.min.css' => [],
+                'css/cover.css' => [],
+            ],
+        ],
+    ];
+    $libraries['arvodia.bootstrap'] = [
+        'title' => 'Arvodia Styling',
+        'version' => '3.0',
+        'js' => [
+            'js/bootstrap.min.js' => [],
+        ],
+        'css' => [
+            'component' => [
+                'css/bootstrap.min.css' => [],
+                'css/sdr_btstrap.css' => [],
+            ],
+        ],
+    ];
+}
+
+function as_preprocess_maintenance_page(array &$variables) {
+    $variables['#attached']['library'][] = 'as/arvodia.maintenance';
+    $variables['signatur'] = t('<p>Developed By <a href="mailto:arvodia@hotmail.com">EURL ARVODIA</a>, <a href="/contact/feedback">Website feedback</a>.</p>');
+}
+
+/**
+ * Implements hook_preprocess_page() for page.html.twig.
+ */
+function as_preprocess_page(array &$variables) {
+
+    $variables['#attached']['library'][] = 'as/arvodia.bootstrap';
+    $variables['is_home'] = false;
+    if (\Drupal::routeMatch()->getRouteName() === 'view.home.page_1') {
+        $variables['is_home'] = true;
+    }
+}
+
+function menuLoadLinks($menu_name) {
+    $links = [];
+    $storage = \Drupal::entityManager()->getStorage('menu_link_content');
+    $menu_links = $storage->loadByProperties(['menu_name' => $menu_name]);
+    if (empty($menu_links))
+        return $links;
+    foreach ($menu_links as $mlid => $menu_link) {
+        $link = [];
+        $link['type'] = 'menu_link';
+        $link['mlid'] = $menu_link->id->value;
+        $link['plid'] = $menu_link->parent->value ?? '0';
+        $link['menu_name'] = $menu_link->menu_name->value;
+        $link['link_title'] = $menu_link->title->value;
+        $link['uri'] = str_replace('internal:/', '/', $menu_link->link->uri);
+        $link['options'] = $menu_link->link->options;
+        $link['weight'] = $menu_link->weight->value;
+        $links[] = $link;
+    }
+    // Sort menu links by weight element
+//  usort($links, [SortArray::class, 'sortByWeightElement']);
+    return $links;
+}
+
+//--------------------------------------------------------
+/**
+ * Implements hook_links__node()
+ */
+function as_preprocess_links__node(array &$variables) {
+    if (\Drupal::languageManager()->getCurrentLanguage()->getId() == 'ar')
+        $variables['attributes']['class'] = 'linknode linknode-ar';
+    else
+        $variables['attributes']['class'] = 'linknode';
+    if (isset($variables['links']['node-readmore'])) {
+        global $base_url;
+        if (\Drupal::config('sdr_contact.parametre')->get('settings.facebook_shar'))
+            $variables['links']['facebook-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('http://www.facebook.com/share.php?u=' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath() . '&title=' . $variables['links']['node-readmore']['text_attributes']['title']->value(), ['attributes' => ['class' => ['shar-facebook']],]))->toString();
+        if (\Drupal::config('sdr_contact.parametre')->get('settings.linkedin_shar'))
+            $variables['links']['linkedin-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('http://www.linkedin.com/shareArticle?mini=true&url=' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath() . '&title=' . $variables['links']['node-readmore']['text_attributes']['title']->value() . '&source=' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath(), ['attributes' => ['class' => ['shar-linkedin']],]))->toString();
+        if (\Drupal::config('sdr_contact.parametre')->get('settings.twitter_shar'))
+            $variables['links']['twitter-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('https://twitter.com/intent/tweet?url=' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath() . '&status=' . $variables['links']['node-readmore']['text_attributes']['title']->value() . '+' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath(), ['attributes' => ['class' => ['shar-twitter']],]))->toString();
+        if (\Drupal::config('sdr_contact.parametre')->get('settings.google_shar'))
+            $variables['links']['google-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('https://plus.google.com/share?url=' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath(), ['attributes' => ['class' => ['shar-google']],]))->toString();
+        if (\Drupal::config('sdr_contact.parametre')->get('settings.email_shar'))
+            $variables['links']['email-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('mailto:?subject=' . $variables['links']['node-readmore']['text_attributes']['title']->value() . '&body=Check out this site ' . $base_url . base_path() . Url::fromRoute('entity.node.canonical', ['node' => $variables['links']['node-readmore']['link']['#url']->getRouteParameters()['node']], ['absolute' => TRUE])->getInternalPath(), ['attributes' => ['class' => ['shar-email']],]))->toString();
+        $variables['links'] = array_reverse($variables['links'], true);
+        $variables['links']['node-readmore']['link']['#options']['attributes']['class'][] = 'btn btn-info btn-sm glyphicon glyphicon-plus';
+        $variables['links']['node-readmore']['link']['#title'] = ' ' . t('Read more');
+    } else {
+        global $base_url;
+        if (isset(\Drupal::routeMatch()->getParameters()->get('node')->type->target_id))
+            if (\Drupal::routeMatch()->getParameters()->get('node')->type->target_id == 'page' || \Drupal::routeMatch()->getParameters()->get('node')->type->target_id == 'article'
+            ) {
+                if (\Drupal::config('sdr_contact.parametre')->get('settings.facebook_shar'))
+                    $variables['links']['facebook-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('http://www.facebook.com/share.php?u=' . $base_url . \Drupal::service('path.current')->getPath() . '&title=' . \Drupal::routeMatch()->getParameter('node')->title->value, ['attributes' => ['class' => ['shar-facebook']],]))->toString();
+                if (\Drupal::config('sdr_contact.parametre')->get('settings.linkedin_shar'))
+                    $variables['links']['linkedin-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('http://www.linkedin.com/shareArticle?mini=true&url=' . $base_url . \Drupal::service('path.current')->getPath() . '&title=' . \Drupal::routeMatch()->getParameter('node')->title->value . '&source=' . $base_url . \Drupal::service('path.current')->getPath(), ['attributes' => ['class' => ['shar-linkedin']],]))->toString();
+                if (\Drupal::config('sdr_contact.parametre')->get('settings.twitter_shar'))
+                    $variables['links']['twitter-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('https://twitter.com/intent/tweet?url=' . $base_url . \Drupal::service('path.current')->getPath() . '&status=' . \Drupal::routeMatch()->getParameter('node')->title->value . '+' . $base_url . \Drupal::service('path.current')->getPath(), ['attributes' => ['class' => ['shar-twitter']],]))->toString();
+                if (\Drupal::config('sdr_contact.parametre')->get('settings.google_shar'))
+                    $variables['links']['google-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('https://plus.google.com/share?url=' . $base_url . \Drupal::service('path.current')->getPath(), ['attributes' => ['class' => ['shar-google']],]))->toString();
+                if (\Drupal::config('sdr_contact.parametre')->get('settings.email_shar'))
+                    $variables['links']['email-shar']['link'] = Link::fromTextAndUrl('', Url::fromUri('mailto:?subject=' . \Drupal::routeMatch()->getParameter('node')->title->value . '&body=Check out this site ' . $base_url . \Drupal::service('path.current')->getPath(), ['attributes' => ['class' => ['shar-email']],]))->toString();
+            }
+        $variables['links'] = array_reverse($variables['links'], true);
+    }
+    if (isset($variables['links']['statistics_counter'])) {
+        $variables['links']['statistics_counter']['attributes']['class'][] = 'btn btn-default btn-sm disabled glyphicon glyphicon-eye-open';
+        $variables['links']['statistics_counter']['text'] = ' ' . $variables['links']['statistics_counter']['text'];
+    }
+}
+
+function as_preprocess_block(&$variables) {
+    if ($variables['base_plugin_id'] == 'contact_block') {
+        $msgTmp = '';
+        switch (\Drupal::languageManager()->getCurrentLanguage()->getId()) {
+            case 'ar':
+                $msgTmp = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.contactblock')->get('settings.contact_text');
+                break;
+            case 'en':
+                $msgTmp = \Drupal::config('block.block.contactblock')->get('settings.contact_text');
+                break;
+            case 'fr':
+                $msgTmp = \Drupal::languageManager()->getLanguageConfigOverride('fr', 'block.block.contactblock')->get('settings.contact_text');
+                break;
+        }
+        $variables['content']['contact_block_contact_text']['#markup'] = '<p>' . nl2br(\Drupal\filter\Render\FilteredMarkup::create(htmlentities($msgTmp))) . '</p>';
+    }
+}
+
+function as_preprocess_menu__account(&$variables) {
+    $variables['is_accueil'] = false;
+//    $variables['#cache']['max-age'] = 0;
+}

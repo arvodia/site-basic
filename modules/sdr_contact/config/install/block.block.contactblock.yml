@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - sdr_contact
+    - system
+  theme:
+    - as
+id: contactblock
+theme: as
+region: content
+weight: 0
+provider: null
+plugin: contact_block
+settings:
+  id: contact_block
+  label: 'Configuring the Contact Form'
+  provider: sdr_contact
+  label_display: '0'
+  contact_text: 'Simply fill out the form and send it.'
+visibility:
+  request_path:
+    id: request_path
+    pages: /contact
+    negate: false
+    context_mapping: {  }
+contact_text: 'Simply fill out the form and send it.'

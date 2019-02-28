@@ -1,0 +1,6 @@
+name: External Link
+type: module
+description: Pour partager des lien externe comme Favories Partenaire ou autre site web de meme entreprise.
+core: 8.x
+package: EURL ARVODIA
+hidden: true

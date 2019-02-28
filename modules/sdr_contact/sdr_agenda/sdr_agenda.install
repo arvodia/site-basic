@@ -1,0 +1,23 @@
+<?php
+
+use \Drupal\menu_link_content\Entity\MenuLinkContent;
+use \Drupal\file\Entity\File;
+use Drupal\user\RoleInterface;
+
+function sdr_agenda_install() {
+    $menu_link = MenuLinkContent::create([
+                'title' => t(' Diary'),
+                'description' => t('Events Calendar'),
+                'link' => ['uri' => 'internal:/agenda/month'],
+                'menu_name' => 'tools',
+                'expanded' => TRUE,
+                'weight' => -50,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t(' Agenda')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t(' مذكرات')]
+    );
+    $menu_link->save();
+}

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: rubrique_logo_style
+label: 'Rubrique Logo style'
+effects:
+  39c7578f-3f65-4bca-819c-07843206c6ea:
+    uuid: 39c7578f-3f65-4bca-819c-07843206c6ea
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 140
+      height: 140

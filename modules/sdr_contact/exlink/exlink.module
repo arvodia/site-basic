@@ -1,0 +1,43 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+function exlink_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.exlink':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('pour les lien externe comme Favories Partenaire ou autre site web de meme projet') . '</p>';
+            return $output;
+        default:
+    }
+}
+
+function exlink_preprocess_views_view_field__external_link__block_1(&$var) {
+    if ($var['field']->field == 'field_external_link') {
+        if (!empty($var['output'])) {
+            foreach (explode('</li><li>', $var['output']) as $key => $value) {
+                if (strpos(parse_url($value)['host'], 'google'))
+                    $ico = file_create_url("public://") . 'src/google.com.ico';
+                elseif (strpos(parse_url($value)['host'], 'twitter'))
+                    $ico = file_create_url("public://") . 'src/twitter.com.png';
+                else
+                    $ico = file_create_url("public://") . 'src/' . parse_url($value)['host'] . '.png';
+                $var['exlinks'][] = [
+                    'url' => $value,
+                    'title' => explode('.', str_replace("www.", "", parse_url($value)['host']))[0],
+                    'ico' => $ico,
+                ];
+            }
+        }
+    }
+}
+
+function exlink_preprocess_views_view_fields__external_link__block_1(array &$var) {
+    $var['ispublic'] = \Drupal\node\Entity\Node::load($var['row']->nid)->isPublished();
+    $var['sdr'] = [
+        'count' => count($var['view']->result) - 1,
+        'number' => $var['row']->index
+    ];
+    $var['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+}

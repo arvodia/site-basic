@@ -1,0 +1,18 @@
+{#
+#}
+{% import _self as menus %}
+{#
+  We call a macro which calls itself to render the full tree.
+  @see http://twig.sensiolabs.org/doc/tags/macro.html
+#}
+{{ menus.menu_links(items, attributes, 0) }}
+{% macro menu_links(items, attributes, menu_level) %}
+    {% import _self as menus %}
+    {% if items %}
+        <div class="list-group">
+            {% for item in items %}
+                <a href="{{ item.url }}" {{ item.attributes }}>{{ item.title }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}

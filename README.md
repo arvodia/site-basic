@@ -1,0 +1,50 @@
+# DRUPAL PROFILES ARVODIA Multilingue
+
+Drupal ARVODIA Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
+
+## introduction
+Un profiles léger et rapide avec Blog simple, clé à la main et prêt à être utiliser.
+
+## prérequis
+```
+Drupal 8.4.4 , +
+Php 7 , +
+```
+## Installing
+
+telecharger l'archive dans le répertoire profiles de project drupal
+
+```
+drupal.dev/profiles/arvodia
+```
+
+## Types d’installations
+
+###Pack Basic :
+
+Des sites web équipés d’un désign responsive à faible contenu de diffusion avec :
+    Cinque rubrique pour promouvoir les activités.
+    Coordonnée de contact avec map géolocalisation.
+    Un formulaire de contact.
+    Carrousel à trois images animées.
+    Deux contenus latéraux avec possibilité de téléchargement de fichier PDF
+    Partage avec d’autres medias externes.
+    Un Back-office pour la modification de contenu publié, accessible par le rôle d’Administrateur de site.
+    Multilingue (anglais, arabe, français)
+    
+###Pack Blog :
+
+Des sites web équipés des fonctionnalités d’abonnement basic avec en plus une taille importante de contenu et une nouvelle rubrique Blog qui permet la publication d’article, mais aussi ;
+    possibilité de l’utilisateur de s’inscrire pour commenter les articles.
+    Un nouveau rôle modérateur avec les permissions de gestion de commenter et utilisation.
+    Formulaire de contact pour les inscrits et pour tous les utilisateurs.
+    
+## Git clone :
+```
+$ git clone https://github.com/arvodia/arvodia.git
+```
+## Contact :
+[arvodia@hotmail.com](mailto:arvodia@hotmail.com) - EURL ARVODIA
+[contact@arvodia.com](mailto:contact@arvodia.com) - EURL ARVODIA
+
+

@@ -1,0 +1,12 @@
+settings:
+  activate_avatar: true
+  avatar_blog: false
+  cron_delete: true
+  favicon_id: false
+  map_key: AIzaSyAy-bkeC3suSSBgWbGl2OZCqcSDY9pUe0o
+  facebook_shar: 1
+  google_shar: 1
+  twitter_shar: 1
+  linkedin_shar: 1
+  email_shar: 1  
+  register_as: subscriber

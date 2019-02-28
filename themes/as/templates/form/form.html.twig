@@ -1,0 +1,16 @@
+{#
+#}
+{% set url_actual = path('<current>') %}
+<form{{ attributes }}>  
+    {% if url_actual == '/user/login' %}
+        <h2 class="form-signin-heading">{{ 'Please sign in'|t }}</h2>
+    {% elseif url_actual == '/user/password' %}
+        <h2 class="form-signin-heading">{{ 'Reset your password'|t }}</h2>
+    {% endif %}      
+    {{ children }}
+    {% if url_actual == '/user/login' %}
+        <div align="center" >
+            <a href="/user/password" data-drupal-link-system-path="user/password">{{ 'Reset your password'|t }}</a>
+        </div>
+    {% endif %}   
+</form>

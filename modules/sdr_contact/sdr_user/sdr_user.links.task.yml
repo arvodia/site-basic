@@ -1,0 +1,9 @@
+view.utilisateur.page_1:
+  route_name: view.utilisateur.page_1
+  base_route: view.utilisateur.page_1
+  title: 'People'
+  
+user.admin_create:
+  route_name: user.admin_create
+  title: 'Add User'
+  base_route: view.utilisateur.page_1 

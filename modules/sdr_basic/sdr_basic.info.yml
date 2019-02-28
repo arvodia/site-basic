@@ -1,0 +1,8 @@
+name: Basic
+type: module
+description: Un site web de cinque rubique avec un formulaire de contact
+core: 8.x
+package: EURL ARVODIA PACK
+dependencies:
+  - sdr_contact
+hidden: true 

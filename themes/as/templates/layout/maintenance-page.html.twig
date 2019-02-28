@@ -1,0 +1,98 @@
+{#
+<header role="banner">
+  {% if logo %}
+    <a href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home">
+      <img src="{{ logo }}" alt="{{ 'Home'|t }}"/>
+    </a>
+  {% endif %}
+  {% if site_name or site_slogan %}
+    {% if site_name %}
+      <h1>
+        <a href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
+      </h1>
+    {% endif %}
+    {% if site_slogan %}
+      <div>{{ site_slogan }}</div>
+    {% endif %}
+  {% endif %}
+</header>
+<main role="main">
+  {% if title %}
+    <h1>{{ title }}</h1>
+  {% endif %}
+  {{ page.highlighted }}
+  {{ page.content }}
+</main>
+{% if page.sidebar_first %}
+  <aside role="complementary">
+    {{ page.sidebar_first }}
+  </aside>
+{% endif %}
+{% if page.sidebar_second %}
+  <aside role="complementary">
+    {{ page.sidebar_second }}
+  </aside>
+{% endif %}
+{% if page.footer %}
+  <footer role="contentinfo">
+    {{ page.footer }}
+  </footer>
+{% endif %}
+<main role="main">
+  {% if title %}
+    <h1>{{ title }}</h1>
+  {% endif %}
+  {{ page.highlighted }}
+  {{ page.content }}
+</main>
+#}
+<div class="text-center text-centercover-container d-flex w-100 h-100 p-3 mx-auto flex-column" >
+    <header class="masthead mb-auto">
+        <div class="inner" >
+            {% if logo %}
+                <nav class="nav nav-masthead justify-content-center">
+                    <a class="nav-link active" href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home" >
+                        <img class="bd-placeholder-img" src="{{ logo }}" alt="{{ 'Home'|t }}" />
+                    </a>
+                </nav>
+
+            {% endif %}
+            {% if user_name %}
+                <h1 class="masthead-brand">
+                    <a href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home">{{ user_name }}</a>
+                </h1>        
+            {% else %}
+                {% if site_name %}
+                    <h1 class="masthead-brand"></br>
+                        <a href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
+                    </h1>
+                {% endif %}
+            {% endif %}
+        </div>
+    </header>
+    <main role="main" class="inner cover">
+        {% if title %}
+            <h2 class="cover-heading">{{ title }}</h2>
+        {% endif %}
+        <p class="lead">
+            {{ page.highlighted }}
+            {{ page.content }}
+        </p>
+        <div class="inner">
+            <p>{{ "Authorized users can log in directly via the"|trans }} <a href="/user/login">{{ "user login"|trans }}</a> {{ "page"|trans }}</p>
+        </div>
+        <p class="lead">
+            <a href="/user/login" class="btn btn-lg btn-secondary">{{ "Login"|trans }}</a>
+        </p>
+        {% if site_slogan %}
+            <div class="mastfoot">
+                <p>{{ site_slogan }}<p>
+            </div>
+        {% endif %}
+    </main>
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p>{{ signatur }}</p>
+        </div>
+    </footer>            
+</div>

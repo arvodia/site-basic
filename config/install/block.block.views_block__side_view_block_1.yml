@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.side_view
+  module:
+    - views
+  theme:
+    - as
+id: views_block__side_view_block_1
+theme: as
+region: sidebar_first
+weight: -5
+provider: null
+plugin: 'views_block:side_view-block_1'
+settings:
+  id: 'views_block:side_view-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility: {  }

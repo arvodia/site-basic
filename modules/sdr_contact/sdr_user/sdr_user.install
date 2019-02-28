@@ -1,0 +1,27 @@
+<?php
+
+use Drupal\shortcut\Entity\Shortcut;
+use \Drupal\menu_link_content\Entity\MenuLinkContent;
+
+\Drupal::service('entity.definition_update_manager')->applyUpdates();
+
+function sdr_user_install() {
+    \Drupal::configFactory()->getEditable('views.view.user_admin_people')->set('display.default.display_options.access.options.perm', 'gestion utilisateur')->save();
+    $menu_link = MenuLinkContent::create([
+                'title' => t(' People'),
+                'description' => 'Show all People',
+                'link' => ['uri' => 'internal:/utilisateur'],
+                'menu_name' => 'tools',
+                'expanded' => TRUE,
+                'weight' => 7,
+    ]);
+    $menu_link->addTranslation('fr', [
+        'title' => t(' Personnes')]
+    );
+    $menu_link->addTranslation('ar', [
+        'title' => t(' المستخدمين')]
+    );
+    $menu_link->save();
+    Drupal\user\Entity\User::load(1)->block()->save();
+    \Drupal::service('router.builder')->rebuild();
+}

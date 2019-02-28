@@ -1,0 +1,115 @@
+{#
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+    <head>
+    <head-placeholder token="{{ placeholder_token|raw }}">
+        <title>{{ head_title|safe_join(' | ') }}</title>
+        <css-placeholder token="{{ placeholder_token|raw }}">
+            <style>
+                @-ms-viewport     { width: device-width; }
+                @-o-viewport      { width: device-width; }
+                @viewport         { width: device-width; }  
+                body {
+                    padding-top: 40px;
+                    padding-bottom: 40px;
+                    background-color: #eee;
+                }
+                .form-signin {
+                    max-width: 330px;
+                    padding: 15px;
+                    margin: 0 auto;
+                }
+                .form-signin .form-signin-heading,
+                .form-signin .checkbox {
+                    margin-bottom: 10px;
+                }
+                .form-signin .checkbox {
+                    font-weight: normal;
+                }
+                .form-signin .form-control {
+                    position: relative;
+                    height: auto;
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    padding: 10px;
+                    font-size: 16px;
+                }
+                .form-signin .form-control:focus {
+                    z-index: 2;
+                }
+                .form-signin input[type="email"] {
+                    margin-bottom: -1px;
+                    border-bottom-right-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+                .form-signin input[type="password"] {
+                    margin-bottom: 10px;
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                }            
+            </style>
+            <script>
+                (function () {
+                'use strict';
+                function emulatedIEMajorVersion() {
+                var groups = /MSIE ([0-9.]+)/.exec(window.navigator.userAgent)
+                if (groups === null) {
+                return null
+                }
+                var ieVersionNum = parseInt(groups[1], 10)
+                var ieMajorVersion = Math.floor(ieVersionNum)
+                return ieMajorVersion
+                }
+                function actualNonEmulatedIEMajorVersion() {
+                var jscriptVersion = new Function('')() // jshint ignore:line
+                if (jscriptVersion === undefined) {
+                return 11 // IE11+ not in emulation mode
+                }
+                if (jscriptVersion < 9) {
+                return 8 // IE8 (or lower; haven't tested on IE<8)
+                }
+                return jscriptVersion // IE9 or IE10 in any mode, or IE11 in non-IE11 mode
+                }
+                var ua = window.navigator.userAgent
+                if (ua.indexOf('Opera') > - 1 || ua.indexOf('Presto') > - 1) {
+                return // Opera, which might pretend to be IE
+                }
+                var emulated = emulatedIEMajorVersion()
+                if (emulated === null) {
+                return // Not IE
+                }
+                var nonEmulated = actualNonEmulatedIEMajorVersion()
+                if (emulated !== nonEmulated) {
+                window.alert('WARNING: You appear to be using IE' + nonEmulated + ' in IE' + emulated + ' emulation mode.\nIE emulation modes can behave significantly differently from ACTUAL older versions of IE.\nPLEASE DON\'T FILE BOOTSTRAP BUGS based on testing in IE emulation modes!')
+                }
+            </script>        
+            <js-placeholder token="{{ placeholder_token|raw }}"> 
+                </head>
+                <body{{ attributes }}>
+                    {#
+                      Keyboard navigation/accessibility link to main content section in
+                      page.html.twig.
+                    #}
+                    <a href="#main-content" class="visually-hidden focusable">
+                        {{ 'Skip to main content'|t }}
+                    </a>
+                    {{ page }}
+                    <script>
+                        (function () {
+                        'use strict';
+                        if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+                        var msViewportStyle = document.createElement('style')
+                        msViewportStyle.appendChild(
+                        document.createTextNode(
+                        '@-ms-viewport{width:auto!important}'
+                        )
+                        )
+                        document.querySelector('head').appendChild(msViewportStyle)
+                        }
+                        })();
+                    </script>
+                <js-bottom-placeholder token="{{ placeholder_token|raw }}">
+                    </body>
+                    </html>

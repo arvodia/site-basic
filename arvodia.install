@@ -1,0 +1,27 @@
+<?php
+
+use Drupal\user\Entity\User;
+use Drupal\user\RoleInterface;
+use Drupal\shortcut\Entity\Shortcut;
+
+function arvodia_install() {
+    \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/node')->save(TRUE);
+    $user = User::load(1);
+    $user->roles[] = 'administrator';
+    $user->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+    $menu_link_manager->updateDefinition('contact.site_page', ['enabled' => TRUE,
+        'weight' => +50,]);
+    user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, ['access site-wide contact form']);
+    user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access site-wide contact form']);
+    $shortcut = Shortcut::create([
+                'shortcut_set' => 'default',
+                'title' => t(' All content'),
+                'weight' => -19,
+                'link' => ['uri' => 'internal:/admin/content'],
+    ]);
+    $shortcut->save();
+    \Drupal::configFactory()->getEditable('node.settings')->set('use_admin_theme', TRUE)->save(TRUE);
+    \Drupal::configFactory()->getEditable('honeypot.settings')->delete();
+}

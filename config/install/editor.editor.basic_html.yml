@@ -1,0 +1,87 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+  module:
+    - ckeditor
+format: basic_html
+editor: ckeditor
+settings:
+  toolbar:
+    rows:
+      -
+        -
+          name: Formatting
+          items:
+            - Bold
+            - Underline
+            - Italic
+            - Superscript
+            - Subscript
+        -
+          name: Align
+          items:
+            - JustifyLeft
+            - JustifyCenter
+            - JustifyBlock
+            - JustifyRight
+        -
+          name: Linking
+          items:
+            - DrupalLink
+            - DrupalUnlink
+        -
+          name: Lists
+          items:
+            - Table
+            - BulletedList
+            - NumberedList
+        -
+          name: Media
+          items:
+            - Blockquote
+            - video_embed
+            - DrupalImage
+        -
+          name: 'Block Formatting'
+          items:
+            - Format
+            - Styles
+        -
+          name: Edition
+          items:
+            - Undo
+            - Redo
+            - Cut
+            - Copy
+            - Paste
+        -
+          name: Insertion
+          items:
+            - HorizontalRule
+            - SpecialChar
+        -
+          name: View
+          items:
+            - Maximize
+  plugins:
+    language:
+      language_list: un
+    stylescombo:
+      styles: "div.alert.alert-success | alert success\r\ndiv.alert.alert-info | alert info\r\ndiv.alert.alert-warning | alert warning\r\ndiv.alert.alert-danger | alert danger"
+    video_embed:
+      defaults:
+        children:
+          autoplay: false
+          responsive: true
+          width: '854'
+          height: '480'
+image_upload:
+  status: true
+  scheme: public
+  directory: inline-images
+  max_size: ''
+  max_dimensions:
+    width: null
+    height: null

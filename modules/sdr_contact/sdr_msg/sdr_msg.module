@@ -1,0 +1,102 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\user\Entity\User;
+use Drupal\Core\Access\AccessResult;
+
+function sdr_msg_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.sdr_msg':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('auto save message contact forms') . '</p>';
+            return $output;
+        default:
+    }
+}
+
+function sdr_msg_form_node_messager_delete_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $form_state->setRedirect('view.messager.page_1');
+}
+
+function sdr_msg_form_contact_message_personal_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    unset($form['actions']['preview']);
+    $form['actions']['submit']['#submit'][] = 'sdr_msg_form_contact_message_personal_form_submit';
+}
+
+function sdr_msg_form_contact_message_personal_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $entity_type = "node";
+    $bundle = "messager";
+    $entity_def = \Drupal::entityManager()->getDefinition($entity_type);
+    $new_node = [
+        'uid' => \Drupal::currentUser()->id(),
+        'title' => $form_state->getValue('subject')[0]['value'],
+        'field_email' => $form['mail']['#value'],
+        'field_from' => $form['name']['#value'],
+        'body' => $form_state->getValue('message')[0]['value'],
+        'promote' => 0,
+        'field_recipient' => $form['recipient']['#value'],
+        $entity_def->get('entity_keys')['bundle'] => $bundle
+    ];
+    $new_post = \Drupal::entityManager()->getStorage($entity_type)->create($new_node);
+    $new_post->save();
+}
+
+function sdr_msg_form_contact_message_gerant_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    unset($form['actions']['preview']);
+    $form['actions']['submit']['#submit'][] = 'sdr_msg_form_contact_message_gerant_form_submit';
+}
+
+function sdr_msg_form_contact_message_gerant_form_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    if (isset(\Drupal::config('contact.form.gerant')->get('recipients')[1])) {
+        foreach (\Drupal::config('contact.form.gerant')->get('recipients') as $key => $valuer) {
+            if ($key != 0) {
+                $entity_type = "node";
+                $bundle = "messager";
+                $entity_def = \Drupal::entityManager()->getDefinition($entity_type);
+                $new_node = [
+                    'uid' => \Drupal::currentUser()->id(),
+                    'title' => $form_state->getValue('subject')[0]['value'],
+                    'field_email' => $form['mail']['#value'],
+                    'field_from' => $form['name']['#value'],
+                    'body' => $form_state->getValue('message')[0]['value'],
+                    'promote' => 0,
+                    'field_recipient' => key(\Drupal::entityQuery('user')->condition('mail', $valuer)->execute()),
+                    $entity_def->get('entity_keys')['bundle'] => $bundle
+                ];
+                $new_post = \Drupal::entityManager()->getStorage($entity_type)->create($new_node);
+                $new_post->save();
+            }
+        }
+    }
+}
+
+function sdr_msg_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
+    if ($node->bundle() == 'messager') {
+        if ($op == 'delete' || $op == 'view') {
+            if (\Drupal::currentUser()->id() == $node->field_recipient->getValue()[0]['target_id']) {
+                return AccessResult::allowed()->cachePerPermissions();
+            }
+        }
+        return AccessResult::forbidden();
+    }
+}
+
+function sdr_msg_entity_access(\Drupal\Core\Entity\EntityInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+    return AccessResult::neutral();
+}
+
+function sdr_msg_preprocess_node(array &$variables) {
+    if (isset($variables['elements']['body']['#bundle']))
+        if ($variables['elements']['body']['#bundle'] == 'messager')
+            if ($variables['elements']['#view_mode'] == "full")
+                if (User::load($variables['elements']['#node']->get('uid')->target_id)) {
+                    $recipient = $variables['elements']['#node']->get('uid')->target_id;
+                    $message = \Drupal::entityManager()->getStorage('contact_message')->create([
+                        'contact_form' => 'personal',
+                        'recipient' => $recipient,
+                    ]);
+                    if ($recipient)
+                        $variables['footer']['form'] = \Drupal::service('entity.form_builder')->getForm($message);
+                }
+}

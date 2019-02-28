@@ -1,0 +1,132 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Access\AccessResult;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Url;
+
+function sdr_agenda_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        case 'help.page.sdr_agenda':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('SDR Agenda est un calendar electronic developed by eurl arvodia') . '</p>';
+            return $output;
+        default:
+    }
+}
+
+function sdr_agenda_theme() {
+    return [
+        'views_view_field__agenda' => [
+            'base hook' => 'field',
+        ],
+        'node__agenda__full' => [
+            'base hook' => 'field',
+        ],
+    ];
+}
+
+function sdr_agenda_menu_local_tasks_alter(&$data, $route_name) {
+    if ($route_name == 'view.agenda.page_year' || $route_name == 'view.agenda.page_month') {
+        $data['tabs'][0]['page.add'] = [
+            '#theme' => 'menu_local_task',
+            "#weight" => 3,
+            '#link' => [
+                'title' => t('Add Event'),
+                'url' => Url::fromUri('base:node/add/agenda'),
+            ],
+        ];
+        $data['tabs'][0]['page_year'] = [
+            '#theme' => 'menu_local_task',
+            '#link' => [
+                'title' => t('Month'),
+                'url' => Url::fromRoute('view.agenda.page_month'),
+            ],
+            "#weight" => 2,
+        ];
+        $data['tabs'][0]['page_month'] = [
+            '#theme' => 'menu_local_task',
+            '#link' => [
+                'title' => t('Year'),
+                'url' => Url::fromRoute('view.agenda.page_year'),
+            ],
+            "#weight" => 2,
+        ];
+    }
+}
+
+function sdr_agenda_form_node_agenda_delete_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $form_state->setRedirect('view.agenda.page_month');
+}
+
+function sdr_agenda_form_node_agenda_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $form_state->setRedirect('view.agenda.page_month');
+    $form['actions']['submit']['#submit'][] = 'sdr_agenda_form_node_agenda_form_submit';
+}
+
+function sdr_agenda_form_node_agenda_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $form_state->setRedirect('view.agenda.page_month');
+    $form['actions']['submit']['#submit'][] = 'sdr_agenda_form_node_agenda_form_submit';
+}
+
+function sdr_agenda_form_node_agenda_form_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $response = new RedirectResponse('/agenda/month/' . (int) date("Ym", strtotime($form_state->getValue('field_event_date')[0]['value'])));
+    $response->send();
+}
+
+function sdr_agenda_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
+    if ($node->bundle() == 'agenda') {
+        if ($op == 'delete' || $op == 'view' || $op == 'update') {
+            if (\Drupal::currentUser()->id() == $node->getOwnerId()) {
+                return AccessResult::allowed()->cachePerPermissions();
+            }
+        }
+        return AccessResult::forbidden();
+    }
+}
+
+function sdr_agenda_preprocess_html(array &$variables) {
+    if (\Drupal::routeMatch()->getRouteName() == 'view.agenda.page_day' || \Drupal::routeMatch()->getRouteName() == 'view.agenda.page_week') {
+        $response = new RedirectResponse('/agenda/month');
+        $response->send();
+        exit;
+    }
+    if (\Drupal::routeMatch()->getRouteName() == 'node.add_page') {
+        $response = new RedirectResponse('/node/add/article');
+        $response->send();
+        exit;
+    }
+}
+
+function sdr_agenda_preprocess_menu__tools(array &$variables) {
+    foreach ($variables['items'] as $key => $item) {
+        if ($variables['items'][$key]['url']->getRouteName() == "view.agenda.page_month") {
+            $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-calendar');
+            $variables['items'][$key]['title'] = ' ' . $variables['items'][$key]['title'];
+        }
+    }
+}
+
+function sdr_agenda_preprocess_views_view__agenda__page_month(array &$var) {
+    $values = ['type' => 'agenda'];
+    $node = \Drupal::entityTypeManager()
+            ->getStorage('node')
+            ->create($values);
+    $form = \Drupal::entityTypeManager()
+            ->getFormObject('node', 'default')
+            ->setEntity($node);
+    $var['footer']['form'] = \Drupal::formBuilder()->getForm($form);
+}
+
+function sdr_agenda_preprocess_views_view_field__agenda__page_month(array &$var) {
+    if (isset($var['field']->field))
+        if ($var['field']->field == 'title') {
+            $var['sdrurl']['href'] = Node::load($var['row']->nid);
+            $var['sdrurl']['title'] = $var['sdrurl']['href']->getTitle();
+            $var['sdrurl']['desc'] = Node::load($var['row']->nid)->get('body')->getValue()[0]['summary'];
+            $var['sdrurl']['hreflang'] = Drupal::languageManager()->getCurrentLanguage()->getId();
+            $var['sdrurl']['href'] = '/' . $var['sdrurl']['hreflang'] . '/' . Url::fromRoute('entity.node.canonical', ['node' => $var['row']->nid])->getInternalPath();
+        }
+}

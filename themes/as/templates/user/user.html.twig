@@ -1,0 +1,13 @@
+{#
+#}
+<article{{ attributes }}>
+    {% if content %}
+        {{- content -}}
+    {% endif %}
+    {% if rolesuser is defined %}
+        <p>{{ rolesuser }}</p>
+    {% endif %}
+    {% if nbownnode is defined %}
+        <p>{{ nbownnode }}</p>
+    {% endif %}  
+</article>

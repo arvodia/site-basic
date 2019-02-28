@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.agenda.body
+    - field.field.node.agenda.field_event_date
+    - node.type.agenda
+  module:
+    - datetime
+    - text
+    - user
+id: node.agenda.default
+targetEntityType: node
+bundle: agenda
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_event_date:
+    weight: 1
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true

@@ -1,0 +1,24 @@
+name: arvodia squelette
+type: theme
+description: Un theme pour un squelette de base - Developed By, Communication Agency, EURL ARVODIA.
+package: EURL ARVODIA
+core: 8.x
+libraries:
+  - as/global-css
+  - as/global-js
+  - core/normalize
+ckeditor_stylesheets:
+  - css/editor.css
+  
+base theme: stable
+regions:
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  highlighted: 'Highlighted'
+  carousel: 'Carousel'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  sidebar_first: 'Sidebar first'
+  footer_second: 'Footer second' 
+  footer_fifth: 'Footer fifth'

@@ -1,0 +1,14 @@
+{#
+#}
+<div{{ attributes }}>
+    {{ title_prefix }}
+    {% if label %}
+        <div class="page-header">
+            <h2{{ title_attributes }}>{{ label }}</h2>
+        </div>
+    {% endif %}
+    {{ title_suffix }}
+    {% block content %}
+        {{ content }}
+    {% endblock %}
+</div>
