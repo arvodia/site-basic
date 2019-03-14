@@ -1,5 +1,0 @@
-#sitemap.settings:
-#  title: 'Sitemap'
-#  parent: system.admin_config_search
-#  description: 'Control what should be displayed on the sitemap.'
-#  route_name: sitemap.settings
