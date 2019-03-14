@@ -5,12 +5,13 @@ Drupal ARVODIA Distribution est un profile d’installation du C.M.S drupal avec
 ## introduction
 Un profiles léger et rapide avec Blog simple, clé à la main et prêt à être utiliser.
 
-## prérequis
+## Prérequis
 ```
-Drupal 8.4.4 , +
+Drupal Core 8.4.4 , +
 Php 7 , +
 ```
-
+## Modules prérequis
+installation modules drupal avec composer
 ```
 composer require --prefer-stable drupal/calendar drupal/token drupal/amptheme drupal/schema_metatag drupal/amp drupal/ctools drupal/pathauto drupal/redirect drupal/taxonomy_menu drupal/views_templates drupal/sitemap drupal/comment_delete drupal/video_embed_field drupal/back_to_top drupal/hreflang drupal/honeypot drupal/advagg drupal/metatag drupal/robotstxt drupal/search404 drupal/xmlsitemap
 ```
