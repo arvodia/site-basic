@@ -1,1 +1,6 @@
-/nbproject/
+/*
+!/profiles/
+!/.gitignore
+!/LICENSE
+!/README.md
+!/composer.json
