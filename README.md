@@ -1,4 +1,4 @@
-# DRUPAL PROFILES ARVODIA Multilingue
+# SITE BASIC Multilingue
 
 Drupal ARVODIA Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
 
