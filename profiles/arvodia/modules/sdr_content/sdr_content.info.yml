@@ -1,0 +1,10 @@
+name: 'ARVODIA Datafixture'
+type: module
+description: 'Ajouter de contenus predefinie'
+core: 8.x
+package: 'EURL ARVODIA'
+#dependencies:
+#  - sdr_pro
+php: !!float 7
+hidden: true
+core_version_requirement: '^8 || ^9'

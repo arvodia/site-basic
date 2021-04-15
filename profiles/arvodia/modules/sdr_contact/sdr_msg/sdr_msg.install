@@ -1,9 +1,0 @@
-<?php
-
-use \Drupal\menu_link_content\Entity\MenuLinkContent;
-
-\Drupal::service('entity.definition_update_manager')->applyUpdates();
-
-function sdr_msg_install() {
-    \Drupal::service('entity.definition_update_manager')->applyUpdates();
-}

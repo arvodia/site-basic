@@ -9,7 +9,6 @@ use Drupal\Component\Serialization\Yaml;
 
 class ArvodiaAddModulesForm extends FormBase {
 
-    private $modules;
     private $subscript;
     private $listing;
 
@@ -18,27 +17,57 @@ class ArvodiaAddModulesForm extends FormBase {
     }
 
     public function buildForm(array $form, FormStateInterface $form_state, $install_state = NULL) {
-        $form['#title'] = $this->t('Installation Module');
+        $form['#title'] = $this->t('Select an installation Module');
         $form['build'] = [
             '#type' => 'markup',
-            '#markup' => $this->t('arvodia vous propose des models de site clé a la main'),
+            '#markup' => $this->t('arvodia vous propose des models de site clé a la main').'</br></br>'
+            . 'Pack Blog et Pro : disponible à la demande sur <b>arvodia@hotmail.com</b>',
             '#weight' => '-5',
         ];
-
+        $this->listing = new ExtensionDiscovery(\Drupal::root());
+        $this->listing = $this->listing->scan('module');
+        $test = [];
+        foreach ($this->listing as $module) {
+            if (!preg_match("#^core/modules/#", $module->getPath())) {
+                $mInfo = Yaml::decode(file_get_contents($module->getPathname()));
+                $module = [$module->getName(), [
+                        'package' => (isset($mInfo['package']) ? $mInfo['package'] : null),
+                        'name' => (isset($mInfo['name']) ? $mInfo['name'] : null),
+                        'description' => (isset($mInfo['description']) ? $mInfo['description'] : null),
+                        'hidden' => (isset($mInfo['hidden']) ? $mInfo['hidden'] : null),
+                ]];
+                if (!isset($module[1]['package']))
+                    continue;
+                if ($module[1]['package'] != 'EURL ARVODIA PACK')
+                    continue;
+                if (!isset($module[1]['name']))
+                    continue;
+                $this->subscript[$module[0]] = $module;
+            }
+        }
+        if (!empty($this->subscript)) {
+            $form['subscript'] = [
+                '#type' => 'radios',
+                '#title' => $this->t('Select a subscription'),
+                '#required' => TRUE,
+                '#weight' => '-4',
+            ];
+            foreach ($this->subscript as $key => $module) {
+                array_multisort($this->subscript);
+                $form['subscript']['#options'][$key] = isset($module[1]['description']) ? ' <strong>' . $this->t($module[1]['name']) . '</strong> : </br><small><i>' . $module[1]['description'] . '</i></small>' : ' <strong>' . $this->t($module[1]['name']) . '</strong>';
+            }
+        }
         $form['actions'] = ['#type' => 'actions'];
         $form['actions']['submit'] = [
             '#type' => 'submit',
-            '#value' => $this->t('Next'),
+            '#value' => $this->t('Save and continue'),
             '#button_type' => 'primary',
         ];
         return $form;
     }
 
     public function validateForm(array &$form, FormStateInterface $form_state) {
-        if(!mkdir(\Drupal::service('file_system')->realpath("public://").'/src'))
-            $form_state->setErrorByName('submit', 'Impossible d\'installer les fichiers');
-        if (!\Drupal::service('module_installer')->install(['sdr_basic']))
-            $form_state->setErrorByName('submit', 'Impossible d\'installer les modules');
+        
     }
 
     public function submitForm(array &$form, FormStateInterface $form_state) {

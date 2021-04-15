@@ -24,7 +24,7 @@ class ArvodiaGerantAccountForm extends FormBase {
         $form['name'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Username'),
-            '#maxlength' => USERNAME_MAX_LENGTH,
+            '#maxlength' => \Drupal\user\UserInterface::USERNAME_MAX_LENGTH ,
             '#description' => $this->t("Several special characters are allowed, including space, period (.), hyphen (-), apostrophe ('), underscore (_), and the @ sign."),
             '#required' => TRUE,
             '#attributes' => ['class' => ['username']],
@@ -92,7 +92,8 @@ class ArvodiaGerantAccountForm extends FormBase {
         $this->user->set("init", 'email');
         $this->user->set("langcode", \Drupal::languageManager()->getCurrentLanguage()->getId());
         $this->user->addRole('admin');
-        $this->user->set('user_picture', file_save_data(file_get_contents("profiles/arvodia/modules/sdr_contact/img/profile.png"), "public://src/profile.png", FILE_EXISTS_REPLACE)->id());
+        $this->user->set('user_picture', file_save_data(file_get_contents(drupal_get_path('profile', 'arvodia') . "/modules/sdr_contact/img/profile.png"), "public://src/profile.png", \Drupal\Core\File\FileSystemInterface::EXISTS_REPLACE)->id());
+        $this->user->set('uid', 3);
         $this->user->activate();
         $this->user->save();
         ContactForm::load('gerant')->setRecipients([$form_state->getValue('mail')])->trustData()->save();

@@ -1,0 +1,10 @@
+name: Blog
+type: module
+description: 'Des sites web équipés des fonctionnalités de pack basic avec en plus une taille importante de contenu et une nouvelle rubrique Blog qui permet la publication des articles'
+core: 8.x
+package: 'EURL ARVODIA PACK'
+dependencies:
+  - sdr_basic
+php: !!float 7
+hidden: true
+core_version_requirement: '^8 || ^9'

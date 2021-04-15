@@ -20,7 +20,6 @@
         "drupal/back_to_top": "^1.1",
         "drupal/calendar": "^1.0@alpha",
         "drupal/core-composer-scaffold": "^9.1",
-        "drupal/core-project-message": "^9.1",
         "drupal/core-recommended": "^9.1",
         "drupal/core-vendor-hardening": "^9.1",
         "drupal/ctools": "^3.4",
@@ -44,6 +43,19 @@
     "prefer-stable": true,
     "config": {
         "sort-packages": true
+    },
+    "autoload": {
+        "classmap": [
+            "profiles/arvodia/scripts/Composer.php"
+        ]
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Drupal\\arvodia\\scripts\\Composer::postInstall"
+        ],
+        "post-package-update-cmd": [
+            "Drupal\\arvodia\\scripts\\Composer::postPackageUpdate"
+        ]
     },
     "extra": {
         "drupal-scaffold": {
@@ -78,27 +90,6 @@
             ],
             "themes/custom/{$name}": [
                 "type:drupal-custom-theme"
-            ]
-        },
-        "drupal-core-project-message": {
-            "include-keys": [
-                "homepage",
-                "support"
-            ],
-            "post-create-project-cmd-message": [
-                "<bg=blue;fg=white>                                                         </>",
-                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
-                "<bg=blue;fg=white>  from the drupal/legacy-project template!               </>",
-                "<bg=blue;fg=white>                                                         </>",
-                "",
-                "<bg=yellow;fg=black>Next steps</>:",
-                "  * Install the site: https://www.drupal.org/docs/8/install",
-                "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
-                "  * Get support: https://www.drupal.org/support",
-                "  * Get involved with the Drupal community:",
-                "      https://www.drupal.org/getting-involved",
-                "  * Remove the plugin that prints this message:",
-                "      composer remove drupal/core-project-message"
             ]
         }
     }

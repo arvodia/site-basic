@@ -54,7 +54,7 @@ function as_preprocess_page(array &$variables) {
 
 function menuLoadLinks($menu_name) {
     $links = [];
-    $storage = \Drupal::entityManager()->getStorage('menu_link_content');
+    $storage = \Drupal::service('entity_type.manager')->getStorage('menu_link_content');
     $menu_links = $storage->loadByProperties(['menu_name' => $menu_name]);
     if (empty($menu_links))
         return $links;

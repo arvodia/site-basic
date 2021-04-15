@@ -101,7 +101,7 @@ function sdr_agenda_preprocess_html(array &$variables) {
 }
 
 function sdr_agenda_preprocess_menu__tools(array &$variables) {
-    foreach ($variables['items'] as $key => $item) {
+    foreach ($variables['items'] as $key => $item) if($item['url']->isRouted()){
         if ($variables['items'][$key]['url']->getRouteName() == "view.agenda.page_month") {
             $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-calendar');
             $variables['items'][$key]['title'] = ' ' . $variables['items'][$key]['title'];

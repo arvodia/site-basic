@@ -8,3 +8,4 @@ dependencies:
   - calendar_datetime
   - views_templates
 hidden: true 
+core_version_requirement: '^8 || ^9'

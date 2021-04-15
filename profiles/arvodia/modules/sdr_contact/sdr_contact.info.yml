@@ -5,7 +5,6 @@ core: 8.x
 package: EURL ARVODIA
 dependencies:
 # EURL ARVODIA PACK
-  #- maps
   - sdr_carousel
   - exlink
   - sdr_msg
@@ -15,3 +14,4 @@ themes:
   - as
 hidden: true  
 php: 7.0
+core_version_requirement: '^8 || ^9'

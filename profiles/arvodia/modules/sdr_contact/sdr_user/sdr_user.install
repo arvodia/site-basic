@@ -3,7 +3,6 @@
 use Drupal\shortcut\Entity\Shortcut;
 use \Drupal\menu_link_content\Entity\MenuLinkContent;
 
-\Drupal::service('entity.definition_update_manager')->applyUpdates();
 
 function sdr_user_install() {
     \Drupal::configFactory()->getEditable('views.view.user_admin_people')->set('display.default.display_options.access.options.perm', 'gestion utilisateur')->save();

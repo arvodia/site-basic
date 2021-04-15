@@ -87,3 +87,4 @@ distribution:
 php: 7.0
 'interface translation project': arvodia
 'interface translation server pattern': profiles/arvodia/translations/%language.po
+core_version_requirement: '^8 || ^9'

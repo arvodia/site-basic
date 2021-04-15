@@ -76,7 +76,7 @@ function sdr_user_library_info_alter(&$libraries, $extension) {
 }
 
 function sdr_user_preprocess_menu__tools(array &$variables) {
-    foreach ($variables['items'] as $key => $item)
+    foreach ($variables['items'] as $key => $item)if($item['url']->isRouted())
         if ($variables['items'][$key]['url']->getRouteName() == 'sdr_user.sudo_form') {
             $variables['items'][$key]['attributes']->addClass('glyphicon glyphicon-globe');
             break;

@@ -4,7 +4,6 @@ use \Drupal\menu_link_content\Entity\MenuLinkContent;
 use \Drupal\file\Entity\File;
 use Drupal\user\RoleInterface;
 
-\Drupal::service('entity.definition_update_manager')->applyUpdates();
 
 function sdr_contact_install() {
     \Drupal::service('router.builder')->rebuildIfNeeded();
@@ -109,12 +108,10 @@ function sdr_contact_install() {
         'title' => t('خريطة الموقع')]
     );
     $menu_link->save();
-    $uri = file_unmanaged_copy('profiles/arvodia/modules/sdr_contact/img/user.png', 'public://src/user.png', FILE_EXISTS_REPLACE);
-    $file = File::Create([
-                'uri' => $uri,
-    ]);
-    $file->setPermanent();
-    $file->save();
+if(Drupal::service('file_system')->copy(
+        \Drupal::root().'/'.\Drupal::service('module_handler')->getModule('sdr_contact')->getPath() ."/img/user.png",
+        \Drupal::service('file_system')->realpath("public://").'/src/user.png'
+        )){$file = File::Create(['uri' => 'public://src/user.png',]);$file->setPermanent();$file->save();}
     \Drupal::configFactory()->getEditable('field.field.user.user.user_picture')->set('settings.default_image.uuid', $file->uuid())->save();
     user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access user contact forms']);
     \Drupal::configFactory()->getEditable('statistics.settings')->set('count_content_views', 1)->save(TRUE);

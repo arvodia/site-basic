@@ -22,3 +22,4 @@ regions:
   sidebar_first: 'Sidebar first'
   footer_second: 'Footer second' 
   footer_fifth: 'Footer fifth'
+core_version_requirement: '^8 || ^9'

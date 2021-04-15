@@ -1,0 +1,10 @@
+name: Pro
+type: module
+description: 'Une Edition des sites web équipés des fonctionnalités de pack Blog avec en plus un contenu de diffusion plus large et MYSQL'
+core: 8.x
+package: 'EURL ARVODIA PACK'
+dependencies:
+  - sdr_basic
+php: !!float 7
+hidden: true
+core_version_requirement: '^8 || ^9'

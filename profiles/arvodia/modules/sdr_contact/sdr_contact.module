@@ -77,10 +77,10 @@ function sdr_contact_entity_insert(EntityInterface $entity) {
         if ($entity->bundle() == 'external_link') {
             foreach ($entity->field_external_link as $key => $value) {
                 if (@file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri) === false)
-                    $data = file_get_contents("profiles/arvodia/modules/sdr_contact/exlink/img/default.png");
+                    $data = file_get_contents(\Drupal::root().'/'.\Drupal::service('module_handler')->getModule('exlink')->getPath() ."/img/default.png");
                 else
                     $data = file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri);
-                $file_src = file_save_data($data, 'public://src/' . parse_url($value->uri)['host'] . '.png', FILE_EXISTS_REPLACE);
+                $file_src = file_save_data($data, 'public://src/' . parse_url($value->uri)['host'] . '.png', \Drupal\Core\File\FileSystemInterface::EXISTS_REPLACE);
             }
         }
     }
@@ -113,10 +113,10 @@ function sdr_contact_node_presave(EntityInterface $node) {
     if ($node->bundle() == 'external_link') {
         foreach ($node->field_external_link as $key => $value) {
             if (@file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri) === false)
-                $data = file_get_contents("profiles/arvodia/modules/sdr_contact/exlink/img/default.png");
+            $data = file_get_contents(\Drupal::root().'/'.\Drupal::service('module_handler')->getModule('exlink')->getPath() ."/img/default.png");
             else
                 $data = file_get_contents('http://www.google.com/s2/favicons?domain=' . $value->uri);
-            $file_src = file_save_data($data, 'public://src/' . parse_url($value->uri)['host'] . '.png', FILE_EXISTS_REPLACE);
+            $file_src = file_save_data($data, 'public://src/' . parse_url($value->uri)['host'] . '.png', \Drupal\Core\File\FileSystemInterface::EXISTS_REPLACE);
             \Drupal::service('router.builder')->rebuild();
         }
     }
@@ -166,7 +166,7 @@ function formats_article_option($form_element) {
 
 function sdr_contact_preprocess_file_link(array &$var) {
     if (\Drupal::routeMatch()->getRouteName() == "sdr_contact.parametre_form") {
-        $var['url'] = $var['file']->url();
+        $var['url'] = $var['file']->getFileUri();
     }
 }
 
@@ -174,8 +174,10 @@ function sdr_contact_preprocess_page(array &$variables) {
     $variables['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
     if (\Drupal::currentUser()->id()) {
         $variables['user_name'] = (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->getAccountName());
-        if (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->get('user_picture')->entity !== null)
-            $variables['user_img'] = (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->get('user_picture')->entity->url());
+        if (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->get('user_picture')->entity !== null){
+        $variables['user_img'] = (Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->get('user_picture')->entity->getFileUri());
+        $variables['user_img'] = file_create_url($variables['user_img']);
+        }
     }
 }
 
@@ -241,7 +243,7 @@ function sdr_contact_preprocess_views_view_field(array &$variables) {
 
 function sdr_contact_preprocess_menu__tools(array &$variables) {
     $variables['#cache']['max-age'] = 0;
-    foreach ($variables['items'] as $key => $item) {
+    foreach ($variables['items'] as $key => $item) if($item['url']->isRouted()){
         if ($item['in_active_trail'])
             $variables['items'][$key]['attributes']->addClass('list-group-item active');
         else
@@ -428,11 +430,13 @@ function sdr_contact_preprocess_feed_icon(array &$var) {
 function sdr_contact_preprocess_maintenance_page(array &$var) {
     global $base_url;
     if (Drupal\user\Entity\User::load(3)->get('user_picture')->entity !== null)
-        $var['logo'] = Drupal\user\Entity\User::load(3)->get('user_picture')->entity->url();
+        $var['logo'] = Drupal\user\Entity\User::load(3)->get('user_picture')->entity->getFileUri();
     else
         $var['logo'] = '/sites/' . str_replace('http://', '', $base_url) . '/files/src/user.png';
     if (\Drupal::service('module_handler')->moduleExists('sdr_basic') || \Drupal::service('module_handler')->moduleExists('sdr_mblog'))
         $var['user_name'] = Drupal\user\Entity\User::load(3)->getAccountName();
+    if(isset($var['logo']))
+        $var['logo'] = file_create_url($var['logo']);
 }
 
 function sdr_contact_preprocess_html(array &$variables) {

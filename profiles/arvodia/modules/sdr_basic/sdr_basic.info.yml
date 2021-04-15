@@ -5,4 +5,5 @@ core: 8.x
 package: EURL ARVODIA PACK
 dependencies:
   - sdr_contact
-hidden: true 
+hidden: true
+core_version_requirement: '^8 || ^9'

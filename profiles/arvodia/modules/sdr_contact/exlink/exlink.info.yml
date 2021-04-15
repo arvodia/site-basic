@@ -4,3 +4,4 @@ description: Pour partager des lien externe comme Favories Partenaire ou autre s
 core: 8.x
 package: EURL ARVODIA
 hidden: true
+core_version_requirement: '^8 || ^9'

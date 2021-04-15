@@ -4,6 +4,4 @@ description: Gestion des utilisateur et block su
 core: 8.x
 package: EURL ARVODIA
 hidden: true
-#dependencies:
-  #- help
-  #- toolbar
+core_version_requirement: '^8 || ^9'
