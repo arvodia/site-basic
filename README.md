@@ -15,6 +15,7 @@ Drupal Core '^8 || ^9'
 ## Installing
 
 telecharger l'archive dans le répertoire web root
+[](#real-cool-heading)
 
 ```
 $ composer install
