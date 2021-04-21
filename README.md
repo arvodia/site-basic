@@ -4,8 +4,11 @@
 ARVODIA Drupal Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
 ### Contenu de ce fichier
 [À propos de Webfony](#about-webfony)
+
 [Installation](#installation)
+
 [Mettre à jour](#update)
+
 ## introduction
 Un profiles léger et rapide, simple, clé à la main et prêt à être utiliser.
 
