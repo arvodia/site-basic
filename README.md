@@ -15,7 +15,7 @@ Drupal Core '^8 || ^9'
 ```
 ## Installing
 
-telecharger l'archive dans le répertoire web root
+Télécharger l'archive dans le répertoire web root, et exécute la commande suivant
 
 ```
 $ composer install
