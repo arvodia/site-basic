@@ -71,5 +71,7 @@ https://www.arvodia.com
 
 ## License
 Pack Basic : GNU General Public License v3.0
+
 Pack Blog  : All Rights Reserved
+
 Pack Pro   : All Rights Reserved
