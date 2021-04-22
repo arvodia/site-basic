@@ -2,7 +2,7 @@
 # SITE WEB Multilingue
 
 ARVODIA Drupal Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
-### Contenu de ce fichier
+### Table des matières
 * [Introduction](#introduction)
 * [Prérequis](#prérequis)
 * [Installing](#installing)
