@@ -58,7 +58,7 @@ Des sites web équipés des fonctionnalités d’abonnement basic avec en plus u
 
 ### Pack Pro : 
 #### disponible à la demande sur arvodia@hotmail.com
-
+## Contact :
 Des sites web équipés des fonctionnalités d’abonnement Blog, avec en plus ;
 
     Ajout catégorie ou sous-catégorie pour la rubrique Blog.
