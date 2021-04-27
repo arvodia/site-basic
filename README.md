@@ -9,10 +9,10 @@ ARVODIA Drupal Distribution est un profile d’installation du C.M.S drupal avec
    * [Pack Basic](#pack-basic-)
    * [Pack Blog](#pack-blog-)
    * [Pack Pro](#pack-pro-)
- * [Git clone](#git-clone)
- * [Contact](#contact)
- * [Site Web](#site-web)
- * [License](#license)
+ * [Git clone](#git-clone-)
+ * [Contact](#contact-)
+ * [Site Web](#site-web-)
+ * [License](#license-)
 
 ## Introduction
 Un profiles léger et rapide, simple, clé à la main et prêt à être utiliser.
@@ -80,7 +80,7 @@ $ git clone https://github.com/arvodia/site-basic.git
 
 https://www.arvodia.com
 
-## License
+## License :
 **Pack Basic** : GNU General Public License v3.0
 
 **Pack Blog**  : All Rights Reserved
