@@ -1,4 +1,5 @@
 ![EURL ARVODIA](https://raw.githubusercontent.com/arvodia/site-basic/main/arvodia-logo-text.png)
+$$\text{This is some centered text}$$
 
 # SITE WEB Multilingue
 ARVODIA Drupal Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
