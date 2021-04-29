@@ -30,6 +30,8 @@ Drupal Core '^8 || ^9'
 Télécharger l'archive dans le répertoire web root, et exécute la commande suivant
 
 ```
+$ git clone https://github.com/arvodia/site-basic.git
+$ cd site-basic/
 $ composer install
 ```
 
