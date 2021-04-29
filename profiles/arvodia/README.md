@@ -1,8 +1,21 @@
+![EURL ARVODIA](https://raw.githubusercontent.com/arvodia/site-basic/main/arvodia-logo-text.png)
+
 # SITE WEB Multilingue
-
 ARVODIA Drupal Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
+### Table des matières
+ * [Introduction](#introduction)
+ * [Prérequis](#prérequis)
+ * [Installing](#installing)
+ * [Types d’installations](#types-dinstallations)
+   * [Pack Basic](#pack-basic-)
+   * [Pack Blog](#pack-blog-)
+   * [Pack Pro](#pack-pro-)
+ * [Git clone](#git-clone-)
+ * [Contact](#contact-)
+ * [Site Web](#site-web-)
+ * [License](#license-)
 
-## introduction
+## Introduction
 Un profiles léger et rapide, simple, clé à la main et prêt à être utiliser.
 
 ## Prérequis
@@ -14,9 +27,11 @@ Drupal Core '^8 || ^9'
 ```
 ## Installing
 
-telecharger l'archive dans le répertoire web root
+Télécharger l'archive dans le répertoire web root, et exécute la commande suivant
 
 ```
+$ git clone https://github.com/arvodia/site-basic.git
+$ cd site-basic/
 $ composer install
 ```
 
@@ -67,3 +82,10 @@ $ git clone https://github.com/arvodia/site-basic.git
 ## Site Web :
 
 https://www.arvodia.com
+
+## License :
+**Pack Basic** : GNU General Public License v3.0
+
+**Pack Blog**  : All Rights Reserved
+
+**Pack Pro**   : All Rights Reserved
