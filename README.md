@@ -1,6 +1,15 @@
 ![EURL ARVODIA](/arvodia-logo-text.png)
+# Rôle utilisateur
+Un rôle définit les autorisations pour les utilisateurs d’effectuer un groupe de tâches. Ces rôles sont définis sur la page de modification de compte utilisateur. Les utilisateurs qui ne sont pas authentifiés ont le rôle Utilisateur anonyme. Les utilisateurs qui sont authentifiés ont le rôle Abonné.
 
->citation
+>`Remarque` : En attribuant un rôle à un utilisateur il va lui permettre d’accéder a la partie back-office de site web.
+
+## Contributeur :
+ - il peut voir ces propre articles
+ - il peut écrire, modifier et supprimer un article et ça traduction
+ - il ne peut pas publier un article ou sa traduction
+ - il ne peut pas modifier si le statut est publier ou refuser
+ - il ne peut pas supprimer si le statut est publie
 
 # SITE WEB Multilingue
 ARVODIA Drupal Distribution est un profile d’installation du C.M.S drupal avec bootstrap comme framework d'interface.
